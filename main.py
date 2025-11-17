@@ -16,7 +16,7 @@ load_dotenv()
 
 app = FastAPI(
     title="Eleandro Gaioski - Currículo com IA",
-    description="Assistente virtual impulsionado por Grok 4 que responde sobre minha carreira",
+    description="Assistente virtual que responde sobre minha carreira",
     version="1.0.0"
 )
 
@@ -101,14 +101,13 @@ async def chat_endpoint(request: Request):
 # Health check
 @app.get("/health")
 async def health():
-    return {"status": "ok", "model": "grok-4"}
+    return {"status": "ok", "model": "grok-4-fast-reasoning"}
 
 
 # Startup message
 @app.on_event("startup")
 async def startup_event():
     print("\nEleandro Gaioski - Currículo com IA")
-    print("Grok 4 rodando e pronto para impressionar recrutadores!")
     print("Acesse: http://localhost:8000\n")
     
     

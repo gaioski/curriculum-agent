@@ -1,158 +1,137 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Eleandro Gaioski - AI Resume</title>
-  <meta name="description" content="Talk to my AI assistant powered by Grok 4"/>
+  <meta name="description" content="Fale com meu assistente virtual"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = { theme: { extend: { colors: { primary: "#0ea5e9", dark: "#0f172a", accent: "#22c55e" } } } }
+    tailwind.config = {
+      theme: { extend: { colors: { primary: "#0ea5e9", dark: "#0f172a" } } }
+    }
   </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    html { scroll-behavior: smooth; }
     #messages { scrollbar-width: thin; }
     #messages::-webkit-scrollbar { width: 6px; }
-    #messages::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
     #messages::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    .animate-bounce { animation: bounce 1.4s infinite; }
-    .animate-bounce200 { animation: bounce 1.4s infinite 0.2s; }
-    .animate-bounce400 { animation: bounce 1.4s infinite 0.4s; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .b1 { animation: bounce 1.4s infinite; }
+    .b2 { animation: bounce 1.4s infinite 0.2s; }
+    .b3 { animation: bounce 1.4s infinite 0.4s; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    .fadeIn { animation: fadeIn 0.4s ease-out; }
   </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen flex flex-col text-gray-800">
 
   <!-- Header -->
   <header class="bg-white shadow-lg border-b sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-      <div class="flex items-center space-x-5">
-        <img src="/static/images/foto-perfil.jpg" alt="Eleandro Gaioski" class="w-20 h-20 rounded-full ring-4 ring-primary/30 object-cover">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <img src="/static/images/foto-perfil.jpg" alt="Eleandro Gaioski" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full ring-4 ring-primary/30 object-cover">
         <div>
-          <h1 class="text-3xl font-bold text-dark" data-t="name">Eleandro Gaioski</h1>
-          <p class="text-lg text-primary" data-t="title">Senior Data Scientist • Agrotech IoT Specialist • Python • AI • ex-CTO</p>
+          <h1 class="text-2xl sm:text-3xl font-bold text-dark">Eleandro Gaioski</h1>
+          <p class="text-sm sm:text-lg text-primary leading-tight">Senior Data Scientist • Agrotech IoT Specialist • Python • AI • ex-CTO</p>
         </div>
       </div>
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3 flex-wrap justify-center">
         <div class="flex bg-gray-100 rounded-full p-1 shadow-md">
-          <button onclick="setLang('en')" id="btn-en" class="px-5 py-2 rounded-full font-medium transition flex items-center gap-2 bg-primary text-white">
-            <img src="https://flagcdn.com/24x18/us.png" alt="USA" width="24" height="18" class="rounded-sm"> EN
+          <button onclick="setLang('en')" id="btn-en" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition hover:bg-gray-200">
+            <img src="https://flagcdn.com/16x12/us.png" alt="EN"> EN
           </button>
-          <button onclick="setLang('pt')" id="btn-pt" class="px-5 py-2 rounded-full font-medium transition flex items-center gap-2 hover:bg-gray-200">
-            <img src="https://flagcdn.com/24x18/br.png" alt="Brasil" width="24" height="18" class="rounded-sm"> PT
+          <button onclick="setLang('pt')" id="btn-pt" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 bg-primary text-white transition">
+            <img src="https://flagcdn.com/16x12/br.png" alt="PT"> PT
           </button>
         </div>
-        <a href="https://linkedin.com/in/gaioski" target="_blank" class="bg-primary hover:bg-blue-700 text-white px-5 py-3 rounded-full flex items-center gap-2 transition">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          LinkedIn
+        <a href="https://linkedin.com/in/gaioski" target="_blank" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm flex items-center gap-2">
+          <i class="fab fa-linkedin-in"></i> LinkedIn
         </a>
-        <a href="https://github.com/gaioski" target="_blank" class="bg-gray-800 hover:bg-black text-white px-5 py-3 rounded-full flex items-center gap-2 transition">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          GitHub
+        <a href="https://github.com/gaioski" target="_blank" class="bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-full text-sm flex items-center gap-2">
+          <i class="fab fa-github"></i> GitHub
         </a>
       </div>
     </div>
   </header>
 
   <!-- Main -->
-  <main class="flex-1 max-w-7xl mx-auto w-full px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <div class="lg:col-span-2 bg-white rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-180px)] overflow-hidden">
-      <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-5 text-center rounded-t-3xl">
-        <h2 class="text-2xl font-bold flex items-center justify-center gap-3" data-t="chat-title">AI Assistant (Grok 4)</h2>
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Chat -->
+    <div class="lg:col-span-2 bg-white rounded-3xl shadow-2xl flex flex-col" style="height: calc(100vh - 180px);">
+      <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-4 text-center rounded-t-3xl">
+        <h2 class="text-xl font-bold" data-t="chat-title">Assistente Virtual</h2>
       </div>
 
-      <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-5 bg-gray-50">
+      <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         <div class="text-center text-gray-600 italic text-sm" data-t="welcome">
-          Hello! I'm Eleandro's virtual assistant. Ask me anything!
+          Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!
         </div>
       </div>
 
-      <!-- Indicador de pensando -->
       <div id="typing-indicator" class="hidden p-4">
         <div class="flex justify-start">
-          <div class="bg-gray-200 rounded-3xl px-6 py-4 shadow-md flex items-center gap-3">
-            <div class="flex space-x-2">
-              <div class="w-3 h-3 bg-gray-600 rounded-full animate-bounce"></div>
-              <div class="w-3 h-3 bg-gray-600 rounded-full animate-bounce200"></div>
-              <div class="w-3 h-3 bg-gray-600 rounded-full animate-bounce400"></div>
-            </div>
-            <span id="typing-text" class="text-gray-700 font-medium">Thinking...</span>
+          <div class="bg-gray-200 rounded-3xl px-5 py-3 shadow-md flex items-center gap-3">
+            <div class="flex space-x-2"><div class="w-3 h-3 bg-gray-600 rounded-full b1"></div><div class="w-3 h-3 bg-gray-600 rounded-full b2"></div><div class="w-3 h-3 bg-gray-600 rounded-full b3"></div></div>
+            <span id="typing-text" class="text-gray-700 font-medium">Pensando...</span>
           </div>
         </div>
       </div>
 
-      <!-- Input -->
-      <div class="p-5 bg-white border-t border-gray-200">
-        <form id="form" class="flex gap-4 items-center">
-          <input type="text" id="input" placeholder="Ask your question..." class="flex-1 px-6 py-4 rounded-full border border-gray-300 focus:outline-none focus:ring-4 focus:ring-primary/30 text-lg shadow-sm">
-          <button type="submit" id="send-btn" class="bg-primary hover:bg-blue-700 text-white min-w-36 px-8 h-14 rounded-full flex items-center justify-center gap-2 shadow-xl transition transform hover:scale-105 font-medium">
-            <span id="send-text">Send</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-            </svg>
+      <div class="p-4 bg-white border-t border-gray-200">
+        <form id="form" class="flex gap-3">
+          <input type="text" id="input" placeholder="Digite sua pergunta..." class="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-4 focus:ring-primary/30 text-base shadow-sm">
+          <button type="submit" id="send-btn" class="bg-primary hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
           </button>
         </form>
       </div>
     </div>
 
-    <!-- Coluna direita -->
-    <div class="flex flex-col gap-6">
-      <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-200">
-        <h3 class="font-bold text-lg text-dark mb-4" data-t="quick-questions">Quick Questions</h3>
-        <div id="suggested-questions" class="space-y-3"></div>
-      </div>
+    <!-- Perguntas rápidas -->
+    <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-200">
+      <h3 class="font-bold text-lg mb-4" data-t="quick-questions">Perguntas rápidas</h3>
+      <div id="suggested-questions" class="space-y-3"></div>
     </div>
   </main>
 
+  <!-- Scripts -->
   <script>
     const translations = {
       en: {
-        name: "Eleandro Gaioski",
-        title: "Senior Data Scientist • Agrotech IoT Specialist • Python • ML • AI • ex-CTO",
         "chat-title": "Virtual Assistant",
         welcome: "Hi! I'm Eleandro's virtual assistant. Ask me anything!",
-        placeholder: "Type your question...",
+        placeholder: "Ask your question...",
         "quick-questions": "Quick Questions",
         questions: [
-          "Tell me about your education",
-		  "What are your most recent professional experiences?",
+          "Tell me about your background",
           "What are your main technologies?",
-          "What makes you stand out as a professional?",
+          "What makes you stand out?",
           "Have you worked with AI or LLMs?",
-          "Have you ever led teams or projects?",
-          "What are the coolest projects you've worked on?",
+          "Have you led teams or projects?",
+          "What are your coolest projects?",
           "Do you work remotely?",
-          "How's your experience with Python?",
-          "What do you like to do in your free time?",
-          "What do you know about machine learning?"
+          "How's your Python experience?",
+          "What do you do in your free time?",
+          "Tell me about your education"
         ]
       },
       pt: {
-        name: "Eleandro Gaioski",
-        title: "Cientista de Dados Sênior • Especialista em IoT para Agrotech • Python • IA • ex-CTO",
         "chat-title": "Assistente Virtual",
         welcome: "Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!",
         placeholder: "Digite sua pergunta...",
         "quick-questions": "Perguntas rápidas",
         questions: [
-          "Fale sobre sua formação",
-		  "Conte-me sobre seus últimos trabalhos",
+          "Fale sobre seu currículo",
           "Quais suas principais tecnologias?",
-          "Qual seu diferencial como profissional?",
-          "Você já trabalhou com IA ou LLMs?",
+          "Qual seu diferencial?",
+          "Já trabalhou com IA ou LLMs?",
           "Já liderou equipes ou projetos?",
-          "Quais os projetos mais legais que fez?",
+          "Quais os projetos mais legais?",
           "Você trabalha remotamente?",
-          "Fale sobre a sua experiência com Python?",
+          "Fale sobre sua experiência com Python",
           "O que gosta de fazer nas horas vagas?",
-          "O que sabe sobre aprendizado de máquina?"
+          "Fale sobre sua formação"
         ]
       }
     };
@@ -160,22 +139,17 @@
     function setLang(lang) {
       document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
       localStorage.setItem('lang', lang);
-
-      // Botões de idioma
-      document.getElementById('btn-en').className = "px-5 py-2 rounded-full font-medium transition flex items-center gap-2 " + (lang === 'en' ? 'bg-primary text-white' : 'hover:bg-gray-200');
-      document.getElementById('btn-pt').className = "px-5 py-2 rounded-full font-medium transition flex items-center gap-2 " + (lang === 'pt' ? 'bg-primary text-white' : 'hover:bg-gray-200');
-
+      document.getElementById('btn-en').classList.toggle('bg-primary', lang==='en');
+      document.getElementById('btn-en').classList.toggle('text-white', lang==='en');
+      document.getElementById('btn-pt').classList.toggle('bg-primary', lang==='pt');
+      document.getElementById('btn-pt').classList.toggle('text-white', lang==='pt');
       const t = translations[lang];
       document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.dataset.t;
-        if (t[key] !== undefined) el.textContent = t[key];
+        const key = el.getAttribute('data-t');
+        if (t[key]) el.textContent = t[key];
       });
-
       document.getElementById('input').placeholder = t.placeholder;
-      document.getElementById('send-text').textContent = lang === 'pt' ? 'Enviar' : 'Send';
-      document.getElementById('typing-text').textContent = lang === 'pt' ? 'Pensando...' : 'Thinking...';
-
-      // Perguntas rápidas
+      document.getElementById('typing-text').textContent = lang==='pt' ? 'Pensando...' : 'Thinking...';
       const container = document.getElementById('suggested-questions');
       container.innerHTML = '';
       t.questions.forEach(q => {
@@ -186,20 +160,18 @@
         container.appendChild(btn);
       });
     }
-
-    // Inicializa
-    setLang(localStorage.getItem('lang') || 'en');
+    setLang(localStorage.getItem('lang') || 'pt');
 
     const messages = document.getElementById('messages');
     const input = document.getElementById('input');
-    const typingIndicator = document.getElementById('typing-indicator');
+    const typing = document.getElementById('typing-indicator');
     const sendBtn = document.getElementById('send-btn');
 
     function addMessage(text, isUser = false) {
       const div = document.createElement('div');
-      div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} animate-fadeIn`;
-      div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-200 text-gray-900'} rounded-3xl px-6 py-4 max-w-lg shadow-md">
-        <p class="whitespace-pre-wrap leading-relaxed">${text.replace(/\n/g, '<br>')}</p>
+      div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
+      div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-200 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md">
+        <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${text.replace(/\n/g, '<br>')}</p>
       </div>`;
       messages.appendChild(div);
       messages.scrollTop = messages.scrollHeight;
@@ -209,21 +181,20 @@
       if (!question.trim()) return;
       addMessage(question, true);
       input.value = '';
-      typingIndicator.classList.remove('hidden');
+      typing.classList.remove('hidden');
       sendBtn.disabled = true;
-
       try {
         const res = await fetch('/chat', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: question })
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({message: question})
         });
         const data = await res.json();
-        typingIndicator.classList.add('hidden');
-        addMessage(data.response || "Sorry, no response.");
-      } catch (err) {
-        typingIndicator.classList.add('hidden');
-        addMessage("Connection error. Try again later.");
+        typing.classList.add('hidden');
+        addMessage(data.response || "Desculpe, não consegui responder.");
+      } catch (e) {
+        typing.classList.add('hidden');
+        addMessage("Erro de conexão. Tente novamente.");
       } finally {
         sendBtn.disabled = false;
       }
