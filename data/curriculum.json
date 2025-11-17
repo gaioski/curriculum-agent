@@ -1,0 +1,104 @@
+{
+  "nome": "Eleandro Ricardo Gaioski",
+  "cargo_atual": "Aberto para novas possibilidades",
+  "local": "Curitiba, Paraná, Brasil",
+  "contato": {
+    "email": "gaioski@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/gaioski"
+  },
+  "resumo": "Engenheiro eletricista com mestrado na França, 3 patentes requeridas e mais de 8 anos como CTO em IoT para máquinas agrícolas. Transformo dados de telemetria (ISO 11783, SAE J1939) em mapas detalhados, dashboards e insights com Python, pandas e machine learning. Já trabalhei com FPGAs em Xangai, liderei produção de chips na Gemalto e criei robôs que jogam futebol na UFPR. Falo francês fluente, inglês avançado e até um pouquinho de chines.",
+  
+  "patentes": [
+    "Revolution: display de LED giratório que forma letras no ar (projeto final da UFPR, nota 10)",
+    "Sistema de leitura automatizada de exames médicos (M-Bio Engenharia)",
+    "Dispositivo de telemetria embarcada para máquinas agrícolas (Iotag, em produção)"
+  ],
+
+  "formacao": [
+    {
+      "curso": "Técnico em Eletrônica",
+      "instituicao": "CEFET-PR (hoje UTFPR)",
+      "periodo": "1997 - 2000"
+    },
+    {
+      "curso": "Engenharia Elétrica",
+      "instituicao": "Universidade Federal do Paraná (UFPR)",
+      "periodo": "2001 - 2007"
+    },
+    {
+      "curso": "Engenheiro Eletrônico",
+      "instituicao": "ENSICAEN, Normandia, França",
+      "periodo": "2004 - 2006"
+    },
+    {
+      "curso": "Master em Microeletrônica, Sinais e Ondas",
+      "instituicao": "Université de Rouen, França",
+      "periodo": "2005 - 2006"
+    }
+  ],
+
+  "experiencias": [
+    {
+      "empresa": "Iotag",
+      "cargo": "CTO e Co-Fundador",
+      "periodo": "Dez/2017 - Out/2025",
+      "descricao": "Liderei o desenvolvimento de uma plataforma de telemetria para máquinas agrícolas, florestais e portuárias. Usei Python (pandas, scikit-learn) para processar dados em tempo real, criar mapas, dashboards e modelos preditivos. Integrei protocolos ISO 11783 (ISOBUS) e SAE J1939. Patente do dispositivo de telemetria em campo. Liderei o desenvolvimento de agentes de inteligência artificial para compilar uma infinidade de dados, extrair as informações mais valiosas para entregar para o usuário",
+      "tecnologias": ["Python", "pandas", "scikit-learn", "ISO 11783", "SAE J1939", "IoT", "Dashboards"]
+    },
+    {
+      "empresa": "M-Bio Engenharia",
+      "cargo": "Proprietário",
+      "periodo": "Jul/2015 - Nov/2017",
+      "descricao": "Desenvolvi equipamentos médicos e automação industrial. Criei sistema de leitura automatizada de exames (patente #2). Usei microcontroladores, C e visão computacional.",
+      "tecnologias": ["C", "Visão Computacional", "Automação", "Equipamentos Médicos"]
+    },
+    {
+      "empresa": "Gemalto (atualmente Thales)",
+      "cargo": "Supervisor de Produção e Engenheiro de Processo",
+      "periodo": "Jun/2010 - Jun/2015",
+      "descricao": "Liderei produção de cartões bancários e chips GSM. Fui responsável por montagem de circuitos integrados e validação de processos. Usei estatística para controle de qualidade.",
+      "tecnologias": ["Produção", "Controle de Qualidade", "Lean Manufacturing", "GSM"]
+    },
+    {
+      "empresa": "Nokia Siemens Networks - NSN (Xangai)",
+      "cargo": "FPGA Designer",
+      "periodo": "Mai/2009 - Mai/2010",
+      "descricao": "Desenvolvi algoritmos de criptografia (A5, GEA3) em FPGA para redes GPRS. Trabalhei com PCI-Express e ATCA DX 200. Participei de projeto piloto de LTE.",
+      "tecnologias": ["FPGA", "Verilog", "VHDL", "LTE", "Criptografia"]
+    },
+    {
+      "empresa": "CITS (coop. Nokia)",
+      "cargo": "Engenheiro Eletrônico / FPGA",
+      "periodo": "Ago/2007 - Abr/2009",
+      "descricao": "Desenvolvi refatoração de placas eletronicas transcodificadoras para plataforma ATCA DX200. Criei IP cores em VHDL (HDLC, x86). Fiz reverse engineering de controladores seriais e integrações de IP de processadores x86.",
+      "tecnologias": ["VHDL", "FPGA", "Reverse Engineering", "ATCA DX200"]
+    },
+    {
+      "empresa": "Valeo (França)",
+      "cargo": "Estagiário em Confiabilidade",
+      "periodo": "Mar/2006 - Jan/2007",
+      "descricao": "Desenvolvi software em C para análise de vida útil de soldas sem chumbo (lead-free). Usei Weibull++ e normas IPC 9701/785. Foi aqui que me apaixonei por dados.",
+      "tecnologias": ["C", "Weibull", "IPC 9701", "Estatística", "Lead-free"]
+    },
+    {
+      "empresa": "UFPR",
+      "cargo": "Pesquisador Voluntário",
+      "periodo": "Fev/2003 - Fev/2004",
+      "descricao": "Construí robôs de futebol controlados por visão computacional. Projeto de display POV 3D com LEDs rotativos (persistência da visão) (Patente #1, nota 10 no TCC).",
+      "tecnologias": ["Robótica", "Visão Computacional", "Microcontroladores", "C"]
+    }
+  ],
+
+  "skills": {
+    "linguagens": ["Python", "R", "C", "VHDL", "Assembler", "Visual Basic"],
+    "dados": ["pandas", "NumPy", "scikit-learn", "Matplotlib", "Weibull++", "Machine Learning"],
+    "ferramentas": ["Quartus", "ISE Xilinx", "Keil", "Git", "Linux", "Docker"],
+    "protocolos": ["ISO 11783 (ISOBUS)", "SAE J1939", "PCI-Express", "HDLC"],
+    "idiomas": {
+      "Português": "Nativo",
+      "Francês": "Fluente",
+      "Inglês": "Avançado",
+      "Mandarim": "Básico"
+    }
+  }
+}
