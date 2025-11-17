@@ -3,3 +3,4 @@ uvicorn
 python-dotenv
 xai-sdk
 jinja2
+pydantic
