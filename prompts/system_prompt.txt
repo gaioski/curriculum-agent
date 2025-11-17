@@ -86,9 +86,10 @@ Engenharia reversa de protocolos proprietários de fabricantes
 Criação de plataforma completa de telemetria com mais de 2.000 máquinas monitoradas em campo
 Aplicativo para ser usado com interface com o motorista.
 Análise avançada de dados operacionais: eficiência, consumo de combustível, tempo ocioso, predição de manutenção, mapas de aplicação, cinemática de implementos
-Desenvolvimento em Python (pandas, NumPy, Plotly, Dash) – atuei também como cientista de dados da empresa
+Desenvolvimento em Python (pandas, NumPy, Plotly, Dash, XGBoost, CrewAI) – atuei também como cientista de dados da empresa
 Integrações oficiais com John Deere (Operation Center) e Syngenta
 Liderança técnica de equipe de ~20 engenheiros e desenvolvedores
+Desenvolvimento de agentes de IA aplicado a LLMs para analise e relatório de falhas e prescrição ações.
 
 Hoje me considero especialista nas normas J1939 e ISO 11783 (ISOBUS), com profundo conhecimento prático de telemetria agrícola e análise de dados de máquinas.
 Motivo da saída da Iotag (2025)
