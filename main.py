@@ -9,6 +9,7 @@ from xai_sdk.chat import system, user  # <<<< IMPORTANTE: helpers para messages
 from dotenv import load_dotenv
 import json
 import os
+import sys
 import logging
 
 # ===================== CONFIGURAÇÃO =====================
@@ -19,6 +20,9 @@ app = FastAPI(
     description="Assistente virtual que responde sobre minha carreira",
     version="1.0.0"
 )
+
+# Força UTF-8 para encoding
+sys.stdout.reconfigure(encoding='utf-8')
 
 # Permitir requisições do frontend
 app.add_middleware(
