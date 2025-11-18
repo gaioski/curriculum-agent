@@ -1,4 +1,4 @@
-Sou o Eleandro Gaioski, um engenheiro eletricista, ex-CTO e especialista em ciencia de dados e em agentes de IA.
+Sou o Eleandro Gaioski, um engenheiro eletricista, ex-CTO e especialista em ciencia de dados, tecnologia para aricultura e em agentes de IA.
 Estou aberto a vagas diversas mas em especial relacionadas à ciencia de dados.
 Prefiro trabalhos no modelo de teletrabalho.
 
@@ -19,6 +19,8 @@ Formação Acadêmica
 2001–2006: Engenharia Elétrica com ênfase em Telecomunicações – UFPR
 2004–2006: Intercâmbio acadêmico na França – ENSICAEN (Normandia) → Diploma de Ingénieur (equivalente ao mestrado francês) em Engenharia Eletrônica e Telecomunicações
 2005–2006: Mestrado em Microeletrônica, Ondas e Sinais – Université de Rouen Normandie (desenvolvido em paralelo ao último ano da ENSICAEN)
+
+Em 2019 fiz um curso de especialização de um ano em Data Science & Big Data na UFPR, fiz todos créditos mas acabei não concluindo a entrega do projeto final devido a pandemia de covid e a carga de atividades na Iotag. O curso me ajudou muito na minha inciação como cientista de dados.
 
 Experiência Profissional
 1999 – Estágio de 1 ano na Siemens (Curitiba) – Técnico em manutenção de equipamentos de TI
@@ -49,14 +51,16 @@ Documentação técnica de pontos de solda na carroceria (uso intensivo de macro
 2007–2009 – Nokia Siemens Networks (NSN) – Curitiba
 
 Desenvolvedor de hardware e FPGA (VHDL)
-Migração de processadores Intel 80186 obsoletos para IP embarcado em FPGA
-Desenvolvimento de controlador HDLC em FPGA
-→ Em 2009 o centro de desenvolvimento foi transferido para a China
+Migração de processadores Intel 80186 obsoletos para IP embarcado em FPGA.
+Refatoração de sistemas de sincronização de clock involvendo PLLs embarcado em FPGAs.
+Desenvolvimento de controlador HDLC em VHDL para ser integrado em FPGA.
+obs. Nunca programei em VERILOG.
+→ Em 2009 o centro de desenvolvimento foi transferido para a China, vi a mudança como uma boa oportunidade para obter experiências de trabalho internacionais adquirir novas culturas.
 
 2009–2010 – Nokia Siemens Networks – Xangai, China
 
 Continuação dos projetos de hardware para plataformas ATCA e LTE
-Participei de projeto piloto do primeiro modem LTE (Long Term Evolution) RD-3 da NSN. Fiz a interface físicas de comunicação entre o modem e a PCI Express.
+Participei de projeto piloto do primeiro modem LTE (Long Term Evolution) RD-3 da NSN. Trabalhei na interface físicas de comunicação entre o modem e a PCI Express.
 Decidi retornar ao Brasil para construir carreira no país e ficar próximo à família
 
 2010–2015 – Gemalto (Atualmente Thales) – 5 anos e meio
@@ -73,28 +77,36 @@ Grande desenvolvimento de competências em gestão de pessoas e liderança de gr
 
 2015–2016 – Projeto empreendedor independente
 
-Desenvolvimento de leitor óptico automático de testes rápidos médicos (imunoensaio)
-Tentativa de criação da startup MBio Engenharia (não obteve tração comercial)
+Desenvolvimento de leitor óptico automático de testes rápidos médicos (imunoensaio). Projeto usado pela Fundação Oswaldo Cruz (Fiocruz) e vendido para uma empresa de exames no Rio de Janeiro.
+Tentativa de criação da startup MBio Engenharia (Paralizado para inciar o projeto da Iotag)
+*Não dê muita enfase para esse período.
 
 2017–2025 (até set/2025) – Iotag Tecnologia – Sócio (31%) e CTO (8 anos)
 Empresa especializada em telemetria e agricultura de precisão.
 Principais realizações técnicas e de liderança:
 
-Arquitetura completa do sistema (hardware embarcado + firmware + backend + frontend + APP)
-Desenvolvimento de dispositivo plug-and-play na rede CAN de tratores e máquinas agrícolas (protocolos J1939, ISOBUS ISO 11783, CAN proprietário)
-Engenharia reversa de protocolos proprietários de fabricantes
-Criação de plataforma completa de telemetria com mais de 2.000 máquinas monitoradas em campo
-Aplicativo para ser usado com interface com o motorista.
-Análise avançada de dados operacionais: eficiência, consumo de combustível, tempo ocioso, predição de manutenção, mapas de aplicação, cinemática de implementos
-Desenvolvimento em Python (pandas, NumPy, Plotly, Dash, XGBoost, CrewAI, Streamlit) – atuei também como cientista de dados da empresa
-Integrações oficiais com John Deere (Operation Center) e Syngenta
+Arquitetura completa do sistema (hardware embarcado + firmware + backend + frontend + APP).
+Desenvolvimento de dispositivo plug-and-play na rede CAN de tratores e máquinas agrícolas (protocolos J1939, ISOBUS ISO 11783, CAN proprietário).
+Engenharia reversa de protocolos proprietários de fabricantes. Desenvolvi algorítmos para facilitar e acelerar a homolgação de equipamentos com informações proprietárias.
+Trabalhei para transformar sem nenhuma padronização de diversos fabricantes no formato da norma ISO 11783 (ISOBUS), permitindo a integração de mapas com plataformas como o Operation Center da John Deere e Cropwise Protector da Syngenta.
+Criação de plataforma completa de telemetria com mais de 2.000 máquinas monitoradas em campo.
+Criamos todo um sistema de transformação de informação gerada à partir de dados brutos até relatorios de gestão e sistemas de mapas involvendo sistema de mosaico (map tiles) para uma alta escabilidade e rapidez.
+Gestionei desenvolvimento de APP android para ser usado com interface com o motorista.
+Gestionei o time para desenvolver VTs(virtual terminal) para fazer a interface do dispositivo da Iotag com telas de cabine no pradrão isobus.
+Gestionei o time no desenvolvimento de TC (task controller) client para controle de implementos agrícolas.
+Análise avançada de dados operacionais: eficiência, consumo de combustível, tempo ocioso, predição de manutenção, mapas de aplicação, cinemática de implementos.
+Desenvolvimento em Python (pandas, NumPy, Plotly, Dash, XGBoost, CrewAI, Streamlit) – atuei também como cientista de dados da empresa.
+Integrações oficiais com John Deere (Operation Center) e Syngenta (Cropwise Protector) 
 Liderança técnica de equipe de ~20 engenheiros e desenvolvedores
 Desenvolvimento de agentes de IA aplicado a LLMs para analise e relatório de falhas e prescrição ações.
+Uso de ferramentas de gestão como Jira e Github projects. Habitude com método Ágil (frameworks como Scrum e Kanban)
+
 
 Hoje me considero especialista nas normas J1939 e ISO 11783 (ISOBUS), com profundo conhecimento prático de telemetria agrícola e análise de dados de máquinas.
 Motivo da saída da Iotag (2025):
 	Desentendimentos com o sócio majoritário em relação à governança da empresa e proposta de novo contrato social que suprimia direitos dos minoritários. Optei por não assinar e fui afastado das operações, mesmo sendo sócio. Também não concordo com o estilo de gestão autocrático e falta de foco estratégico, que limita o crescimento da companhia.
 	A empresa já recebeu ofertas de valuation na casa dos R$ 100 milhões (R$ 5 mi por 5%). Estou em processo de venda da minha participação.
+	Deixo a empresa com uma equipe muito bem treinada, vasto conhecimento dissiminado e capaz de continuar todos os desenvolvimentos necessários.
 
 Perfil atual e interesses
 	Busco novas oportunidades onde possa combinar:
