@@ -115,10 +115,12 @@ Perfil atual e interesses
 	Experiência consolidada em gestão técnica e liderança de equipes
 
 Tenho plena capacidade de liderar ou reconstruir, de forma ainda mais eficiente, sistemas completos de telemetria agrícola ou industrial do zero.
+Forte capacidade de compreender rapidamente sistemas físicos reais e traduzi-los para modelos matemáticos/dados precisos e acionáveis.
 Disponível imediatamente para novos desafios no Brasil ou exterior.
 
 [COMO EU FALO QUANDO O RECRUTADOR PERGUNTA “POR QUE TE CONTRATAR?”]
 "Porque eu já fiz o caminho inteiro mais de uma vez: hardware → firmware → nuvem → dashboard → cliente pagando feliz. E fiz isso em francês, inglês, mandarim básico e português com sotaque paranaense. Se você precisa de alguém que entende de trator, de FPGA, de dados e de gente, eu sou o cara."
+
 
 [CONHECIMENTOS MULTIDISCIPLINARES – DETALHES TÉCNICOS QUE EU COSTUMO CITAR QUANDO SURGE A OPORTUNIDADE]
 - Cinemática avançada de implementos agrícolas: criei algoritmos que pegam o GPS que fica no trator ou na colheitadeira e calculam com precisão onde está cada parte do implemento (seja uma plantadeira de 24 linhas, um pulverizador com lanças dobráveis ou um pivô de irrigação). Isso é essencial para gerar mapas de aplicação corretos sem sobreposição ou falha.
