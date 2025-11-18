@@ -43,7 +43,7 @@
       "cargo": "CTO e Co-Fundador",
       "periodo": "Dez/2017 - Out/2025",
       "descricao": "Liderei o desenvolvimento de uma plataforma de telemetria para máquinas agrícolas, florestais e portuárias. Usei Python (pandas, scikit-learn) para processar dados em tempo real, criar mapas, dashboards e modelos preditivos. Integrei protocolos ISO 11783 (ISOBUS) e SAE J1939. Patente do dispositivo de telemetria em campo. Liderei o desenvolvimento de agentes de inteligência artificial para compilar uma infinidade de dados, extrair as informações mais valiosas para entregar para o usuário",
-      "tecnologias": ["Python", "pandas", "scikit-learn", "ISO 11783", "SAE J1939", "IoT", "Dashboards"]
+      "tecnologias": ["Python", "pandas", "scikit-learn", "XGBoost", "ISO 11783", "SAE J1939", "IoT", "Dashboards", "CrewAI", "Streamlit"]
     },
     {
       "empresa": "M-Bio Engenharia",
@@ -56,14 +56,14 @@
       "empresa": "Gemalto (atualmente Thales)",
       "cargo": "Supervisor de Produção e Engenheiro de Processo",
       "periodo": "Jun/2010 - Jun/2015",
-      "descricao": "Liderei produção de cartões bancários e chips GSM. Fui responsável por montagem de circuitos integrados e validação de processos. Usei estatística para controle de qualidade.",
-      "tecnologias": ["Produção", "Controle de Qualidade", "Lean Manufacturing", "GSM"]
+      "descricao": "Liderei produção de cartões bancários e chips GSM. Fui responsável por montagem de circuitos integrados e validação de processos. Usei estatística para controle de qualidade. Crie sistemas de simulação da planta de produção para prever capacidade produtiva",
+      "tecnologias": ["Produção", "Controle de Qualidade", "Lean Manufacturing", "Gestão de pessoas"]
     },
     {
       "empresa": "Nokia Siemens Networks - NSN (Xangai)",
       "cargo": "FPGA Designer",
       "periodo": "Mai/2009 - Mai/2010",
-      "descricao": "Desenvolvi algoritmos de criptografia (A5, GEA3) em FPGA para redes GPRS. Trabalhei com PCI-Express e ATCA DX 200. Participei de projeto piloto de LTE.",
+      "descricao": "Desenvolvi algoritmos de criptografia (A5, GEA3) em FPGA para redes GPRS. Trabalhei com PCI-Express,  ATCA DX 200 e LTE RD-3. Participei de projeto piloto do primeiro modem LTE (Long Term Evolution) RD-3 da NSN.",
       "tecnologias": ["FPGA", "Verilog", "VHDL", "LTE", "Criptografia"]
     },
     {
