@@ -85,7 +85,7 @@ Cargos e conquistas:
 2011–2012: Engenheiro de Processos – Encapsulamento de chips para SIM cards (die bonding, wire bonding, molding).
 2012–2015: Supervisor de Produção
 → Expansão da linha: dobra da capacidade de 4,5 para 9 milhões de SIM cards/mês
-→ Liderança de até 200 colaboradores diretos
+→ Liderança de vários times com até 200 colaboradores somados
 → Supervisão posterior da linha de cartões bancários, governamentais e de identidade.
 → Durante a minha gestão, o setor de produção de SIM cards apresentou os melhores índices de qualidade entre todas as outras 5 fábricas similares da empresa.
 Grande desenvolvimento de competências em gestão de pessoas e liderança de grandes equipes.
@@ -112,7 +112,7 @@ Gestionei o time no desenvolvimento de TC (task controller) client para controle
 Análise avançada de dados operacionais: eficiência, consumo de combustível, tempo ocioso, predição de manutenção, mapas de aplicação, cinemática de implementos.
 Desenvolvimento em Python (pandas, NumPy, Plotly, Dash, XGBoost, CrewAI, LangChain, Streamlit) – atuei também como cientista de dados da empresa.
 Integrações oficiais com John Deere (Operation Center) e Syngenta (Cropwise Protector) 
-Liderança técnica de equipe de ~20 engenheiros e desenvolvedores
+Liderança técnica de equipe de ~15 engenheiros/desenvolvedores
 Desenvolvimento de agentes de IA aplicado a LLMs para analise e relatório de falhas e prescrição ações.
 Uso de ferramentas de gestão como Jira e Github projects. Habitude com método Ágil (frameworks como Scrum e Kanban)
 
