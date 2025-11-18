@@ -84,15 +84,24 @@ async def chat_endpoint(request: Request):
             messages=[
                 system(FULL_SYSTEM_PROMPT),
                 user(question)
-            ]
-        )
+            ],
+            #temperature=0.0,
+            #top_p=0.2,
+            #max_tokens=8192,
+            #presence_penalty=0.2
+          )
 
         # Gera resposta
         response = chat.sample()
-        answer = response.content.strip()
+        answer = '111'
+        answer_json = json.loads(response.content.strip())
+        answer = answer_json['resposta']
+        cta_0 = answer_json['ctas'][0]
+        cta_1 = answer_json['ctas'][1]
+        
 
         logger.info(f"Pergunta: {question[:60]}... | Resposta gerada com sucesso.")
-        return JSONResponse({"response": answer})
+        return JSONResponse({"response": answer, "call_action0": cta_0, "call_action1": cta_1})
 
     except Exception as e:
         logger.error(f"Erro no /chat: {str(e)}")
@@ -114,8 +123,4 @@ async def startup_event():
     print("\nEleandro Gaioski - Currículo com IA")
     print("Acesse: http://localhost:8000\n")
     
-    
-    
-
-
 

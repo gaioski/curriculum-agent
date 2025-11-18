@@ -12,6 +12,7 @@
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     #messages { scrollbar-width: thin; }
     #messages::-webkit-scrollbar { width: 6px; }
@@ -23,17 +24,49 @@
     @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
     .fadeIn { animation: fadeIn 0.4s ease-out; }
   </style>
+  <style>
+    #messages { scrollbar-width: thin; }
+    #messages::-webkit-scrollbar { width: 6px; }
+    #messages::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .b1 { animation: bounce 1.4s infinite; }
+    .b2 { animation: bounce 1.4s infinite 0.2s; }
+    .b3 { animation: bounce 1.4s infinite 0.4s; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    .fadeIn { animation: fadeIn 0.4s ease-out; }
+    
+    /* 🌟 NOVO: Estilos para melhorar a leitura de elementos Markdown dentro da bolha */
+    .bg-gray-200 > p > ul,
+    .bg-gray-200 > p > ol {
+      /* Adiciona espaçamento interno para listas */
+      padding-left: 1.5rem; /* 6px */
+      margin-top: 0.5rem; /* 8px */
+    }
+
+    .bg-gray-200 > p > ul > li,
+    .bg-gray-200 > p > ol > li {
+        /* Adiciona espaçamento entre itens da lista */
+        margin-bottom: 0.25rem; /* 4px */
+    }
+
+    .bg-gray-200 > p > pre {
+        /* Estilo para blocos de código */
+        background-color: #e2e8f0; /* gray-200, mas mais escuro */
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-size: 0.9em;
+    }
+  </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen flex flex-col text-gray-800">
-
-  <!-- Header -->
   <header class="bg-white shadow-lg border-b sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-4">
-        <img src="/static/images/foto-perfil.jpg" alt="Eleandro Gaioski" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full ring-4 ring-primary/30 object-cover">
-        <div>
+        <img src="/static/images/foto-perfil.jpg" alt="Eleandro Gaioski" class="w-16 h-16 sm:w-16 sm:h-16 rounded-full ring-4 ring-primary/30 object-cover">	
+		<div>
           <h1 class="text-2xl sm:text-3xl font-bold text-dark">Eleandro Gaioski</h1>
-          <p class="text-lg text-primary" data-t="title">Senior Data Scientist • Agrotech IoT Specialist • Python • AI • Ex-CTO</p>
+          <p class="text-base text-primary" data-t="title">Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO</p>
         </div>
       </div>
       <div class="flex items-center gap-3 flex-wrap justify-center">
@@ -54,30 +87,24 @@
       </div>
     </div>
   </header>
-
-  <!-- Main -->
   <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Chat -->
     <div class="lg:col-span-2 bg-white rounded-3xl shadow-2xl flex flex-col" style="height: calc(100vh - 180px);">
       <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-4 text-center rounded-t-3xl">
         <h2 class="text-xl font-bold" data-t="chat-title">Assistente Virtual</h2>
       </div>
-
       <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         <div class="text-center text-gray-600 italic text-sm" data-t="welcome">
           Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!
         </div>
       </div>
-
       <div id="typing-indicator" class="hidden p-4">
         <div class="flex justify-start">
-          <div class="bg-gray-200 rounded-3xl px-5 py-3 shadow-md flex items-center gap-3">
+          <div class="bg-gray-200 rounded-3xl px-6 py-3 shadow-md flex items-center gap-3">
             <div class="flex space-x-2"><div class="w-3 h-3 bg-gray-600 rounded-full b1"></div><div class="w-3 h-3 bg-gray-600 rounded-full b2"></div><div class="w-3 h-3 bg-gray-600 rounded-full b3"></div></div>
             <span id="typing-text" class="text-gray-700 font-medium">Pensando...</span>
           </div>
         </div>
       </div>
-
       <div class="p-4 bg-white border-t border-gray-200">
         <form id="form" class="flex gap-3">
           <input type="text" id="input" placeholder="Digite sua pergunta..." class="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-4 focus:ring-primary/30 text-base shadow-sm">
@@ -87,57 +114,48 @@
         </form>
       </div>
     </div>
-
-    <!-- Perguntas rápidas -->
     <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-200">
       <h3 class="font-bold text-lg mb-4" data-t="quick-questions">Perguntas rápidas</h3>
       <div id="suggested-questions" class="space-y-3"></div>
     </div>
   </main>
-
-  <!-- Scripts -->
   <script>
     const translations = {
       en: {
         "chat-title": "Virtual Assistant",
-		title: "Senior Data Scientist • Agrotech IoT Specialist • Python • AI • Ex-CTO",
+		title: "Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO",
         welcome: "Hi! I'm Eleandro's virtual assistant. Ask me anything!",
         placeholder: "Ask your question...",
         "quick-questions": "Quick Questions",
         questions: [
           "Tell me about your education",
-		  "What are your most recent professional experiences?",
+          "What are your most recent professional experiences?",
           "What are your main technologies?",
           "What makes you stand out?",
           "Have you worked with AI or LLMs?",
           "Have you led teams or projects?",
-          "What are your coolest projects?",
-          "Do you work remotely?",
-          "How's your Python experience?",
           "What do you do in your free time?",
+		  "Do you work remotely?",
         ]
       },
       pt: {
         "chat-title": "Assistente Virtual",
-		title: "Cientista de Dados Sênior • Especialista em IoT para Agrotech • Python • IA • Ex-CTO",
+		title: "Cientista de Dados Sênior • Consultor • Especialista em IoT para Agrotech • Python • IA • Ex-CTO",
         welcome: "Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!",
         placeholder: "Digite sua pergunta...",
         "quick-questions": "Perguntas rápidas",
         questions: [
           "Fale sobre sua formação",
-		  "Conte-me sobre seus últimos trabalhos",
+          "Conte-me sobre seus últimos trabalhos",
           "Quais suas principais tecnologias?",
           "Qual seu diferencial?",
           "Já trabalhou com IA ou LLMs?",
           "Já liderou equipes ou projetos?",
-          "Quais os projetos mais legais?",
-          "Você trabalha remotamente?",
-          "Fale sobre sua experiência com Python",
           "O que gosta de fazer nas horas vagas?",
+		  "Você trabalha remotamente?",
         ]
       }
     };
-
     function setLang(lang) {
       document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
       localStorage.setItem('lang', lang);
@@ -163,12 +181,63 @@
       });
     }
     setLang(localStorage.getItem('lang') || 'pt');
-
     const messages = document.getElementById('messages');
     const input = document.getElementById('input');
     const typing = document.getElementById('typing-indicator');
     const sendBtn = document.getElementById('send-btn');
 
+    // Função para adicionar a resposta (texto + CTAs)
+    function addResponse(text, cta0, cta1) {
+      // 1. Adiciona a mensagem de texto da IA
+	  
+      const htmlText = marked.parse(text).trim(); 
+	  
+      const textDiv = document.createElement('div');
+      textDiv.className = `flex justify-start fadeIn`;
+      textDiv.innerHTML = `<div class="bg-gray-200 text-gray-900 rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md">
+        <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${htmlText}</p>
+      </div>`;
+      messages.appendChild(textDiv);
+
+      // 2. Adiciona os botões de CTA (se existirem)
+      if (cta0 || cta1) {
+        const ctaDiv = document.createElement('div');
+        ctaDiv.className = `flex justify-start pt-2 px-1 fadeIn`; // Espaço entre a resposta e os botões
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = "flex flex-col sm:flex-row gap-2 max-w-xs sm:max-w-xl"; // Contêiner para os botões
+
+        // Cria e adiciona o CTA 0
+        if (cta0) {
+          const btn0 = createCtaButton(cta0);
+          buttonContainer.appendChild(btn0);
+        }
+
+        // Cria e adiciona o CTA 1
+        if (cta1) {
+          const btn1 = createCtaButton(cta1);
+          buttonContainer.appendChild(btn1);
+        }
+
+        ctaDiv.appendChild(buttonContainer);
+        messages.appendChild(ctaDiv);
+      }
+      
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Função auxiliar para criar o botão de CTA
+	function createCtaButton(ctaText) {
+		const btn = document.createElement('button');
+		// CLASSE CORRIGIDA: Removido 'whitespace-nowrap' e 'overflow-hidden text-ellipsis'.
+		// Adicionado 'text-wrap' e 'text-center' para o alinhamento.
+		btn.className = "bg-white border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-wrap text-center";
+		btn.textContent = ctaText;
+		btn.onclick = () => send(ctaText); 
+		btn.title = ctaText; 
+		return btn;
+	}
+
+    // Função para adicionar a mensagem do usuário
     function addMessage(text, isUser = false) {
       const div = document.createElement('div');
       div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
@@ -193,15 +262,21 @@
         });
         const data = await res.json();
         typing.classList.add('hidden');
-        addMessage(data.response || "Desculpe, não consegui responder.");
+        
+        // CORREÇÃO AQUI: Chamar addResponse com o texto e as CTAs
+        addResponse(
+            data.response || "Desculpe, não consegui responder.", 
+            data.call_action0 || null, // Passa null se não vier
+            data.call_action1 || null  // Passa null se não vier
+        );
       } catch (e) {
+        console.error(e);
         typing.classList.add('hidden');
-        addMessage("Erro de conexão. Tente novamente.");
+        addResponse("Erro de conexão. Tente novamente.");
       } finally {
         sendBtn.disabled = false;
       }
     }
-
     document.getElementById('form').addEventListener('submit', e => {
       e.preventDefault();
       send(input.value);
