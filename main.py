@@ -11,6 +11,7 @@ import json
 import os
 import sys
 import logging
+import re
 
 # ===================== LOGGING GOOGLE CLOUD =====================
 # Tenta configurar o logging do Google. Se falhar (rodando local), usa o padrão.
@@ -103,18 +104,53 @@ async def chat_endpoint(request: Request):
             ],
         )
 
-        # Processa resposta
+        ## Processa resposta
+        #response = chat.sample()
+        #
+        ## Tenta fazer o parse do JSON retornado pela IA
+        #try:
+        #    answer_json = json.loads(response.content.strip())
+        #    answer_text = answer_json.get('resposta', "Sem resposta.")
+        #    cta_0 = answer_json.get('ctas', [None, None])[0]
+        #    cta_1 = answer_json.get('ctas', [None, None])[1]
+        #except json.JSONDecodeError:
+        #    # Fallback caso a IA não devolva JSON válido
+        #    answer_text = response.content.strip()
+        #    cta_0, cta_1 = None, None
+        #    logger.warning(f"Falha ao decodificar JSON da IA. Resposta crua: {answer_text}")
+            
+            
+        # Processa resposta da IA
         response = chat.sample()
+        raw_content = response.content.strip()
+
+        # --- SOLUÇÃO DE LIMPEZA (REGEX) ---
+        # Procura pelo primeiro '{' e pelo último '}'
+        # Isso ignora qualquer ```json ou texto que venha antes ou depois
+        match = re.search(r'(\{.*\})', raw_content, re.DOTALL)
         
-        # Tenta fazer o parse do JSON retornado pela IA
+        if match:
+            json_str = match.group(1)
+        else:
+            # Se não achar chaves, assume que é texto puro (fallback)
+            json_str = raw_content
+
         try:
-            answer_json = json.loads(response.content.strip())
+            answer_json = json.loads(json_str)
+            
+            # Pega os dados (com fallback seguro)
             answer_text = answer_json.get('resposta', "Sem resposta.")
-            cta_0 = answer_json.get('ctas', [None, None])[0]
-            cta_1 = answer_json.get('ctas', [None, None])[1]
+            ctas = answer_json.get('ctas', [])
+            
+            # Garante que ctas seja lista
+            if not isinstance(ctas, list): ctas = []
+            cta_0 = ctas[0] if len(ctas) > 0 else None
+            cta_1 = ctas[1] if len(ctas) > 1 else None
+
         except json.JSONDecodeError:
-            # Fallback caso a IA não devolva JSON válido
-            answer_text = response.content.strip()
+            logger.error(f"FALHA JSON: {raw_content}")
+            # Se falhar tudo, devolve o texto cru para o usuário não ficar sem resposta
+            answer_text = raw_content
             cta_0, cta_1 = None, None
             logger.warning(f"Falha ao decodificar JSON da IA. Resposta crua: {answer_text}")
 

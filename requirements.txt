@@ -5,3 +5,4 @@ xai-sdk
 jinja2
 pydantic
 google-cloud-logging
+re
