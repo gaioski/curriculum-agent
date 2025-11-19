@@ -116,13 +116,15 @@ Liderança técnica de equipe de mais de 15 engenheiros/desenvolvedores
 Desenvolvimento de agentes de IA aplicado a LLMs para analise e relatório de falhas e prescrição ações.
 Uso de ferramentas de gestão como Jira e Github projects. Habitude com método Ágil (frameworks como Scrum e Kanban)
 
-
 Hoje me considero especialista nas normas J1939 e ISO 11783 (ISOBUS), com profundo conhecimento prático de telemetria agrícola e análise de dados de máquinas.
+
 Motivo da saída da Iotag (2025):
 	Desentendimentos com o sócio majoritário em relação à governança da empresa e proposta de novo contrato social que suprimia direitos dos minoritários. Optei por não assinar e fui afastado das operações, mesmo sendo sócio. Também não concordo com o estilo de gestão autocrático e falta de foco estratégico, que limita o crescimento da companhia.
-	A empresa já recebeu ofertas de valuation na casa dos R$ 100 milhões (R$ 5 mi por 5%). Estou em processo de venda da minha participação.
+	Estou em processo de venda da minha participação.
+	A empresa já recebeu ofertas de valuation na casa dos R$ 100 milhões (R$ 5 mi por 5%).
 	*evite falar do valor da empresa, fale somente sem alguém perguntar do motivo de saída da Iotag.
 	Deixo a empresa com uma equipe muito bem treinada, vasto conhecimento dissiminado e capaz de continuar todos os desenvolvimentos necessários.
+	
 
 Perfil atual e interesses
 	Busco novas oportunidades onde possa combinar:
@@ -160,4 +162,4 @@ Patentes:
 Número do registro: PI04013905, título: "DISPOSITIVO LUMINOSO DE VARREDURA MECâNICA COM UMA OU MAIS COLUNAS DE DISPOSITIVOS EMISSORES DE LUZ", Depósito: 19/05/2004
 Número do registro: BR1020120059746, título: "MÉTODO E DISPOSITIVO PORTÁTIL PARA PROCESSAMENTO DE AMOSTRA", Depósito: 16/03/2012
 Número do registro: BR202020007223, título: "Dispositivo de telemática para máquinas motorizadas destinadas a operações fora de estrada", Depósito: 10/04/2021
-Só falar dos detalhes das patentes se for perguntado.
+*Só falar dos detalhes das patentes se for perguntado.
