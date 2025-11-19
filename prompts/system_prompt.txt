@@ -53,7 +53,7 @@ Experiência Profissional
 2001–2004 – Estagiário voluntário no Laboratório de Robótica da UFPR
 Desenvolvimento de hardware para robôs de futebol (RoboCup)
 Projeto de robô seguidor de pessoas
-Projeto de display POV 3D com LEDs rotativos (persistência da visão) – usado como trabalho de conclusão do curso de engenharia na UFPR (nota 10), patente requerida e convite da incubadora tecnológica para criação de startup (não pros de projeto)
+Projeto de display POV(Persistence of Vision)  3D com LEDs rotativos (persistência da visão) – usado como trabalho de conclusão do curso de engenharia na UFPR (nota 10), patente requerida e convite da incubadora tecnológica para criação de startup (não pros de projeto)
 
 Março–Agosto 2004 – Estágio na Daiken (Curitiba)
 

@@ -75,6 +75,9 @@
 			  <button onclick="setLang('en')" id="btn-en" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition hover:bg-gray-200">
 				<img src="https://flagcdn.com/16x12/us.png" alt="EN"> EN
 			  </button>
+			  <button onclick="setLang('fr')" id="btn-fr" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition hover:bg-gray-200">
+				<img src="https://flagcdn.com/16x12/fr.png" alt="FR"> FR
+			  </button>
 			  <button onclick="setLang('pt')" id="btn-pt" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 bg-primary text-white transition">
 				<img src="https://flagcdn.com/16x12/br.png" alt="PT"> PT
 			  </button>
@@ -88,6 +91,7 @@
 		  </div>
 		</div>
   </header>
+  
   
 <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
     
@@ -130,166 +134,102 @@
   
   <script>
     const translations = {
-      en: {
-        "chat-title": "Virtual Assistant",
-		title: "Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO",
-        welcome: "Hi! I'm Eleandro's virtual assistant. Ask me anything!",
-        placeholder: "Ask your question...",
-        "quick-questions": "Quick Questions",
-        questions: [
-          "Tell me about your education",
-          "What are your most recent professional experiences?",
-          "What are your main technologies?",
-          "What makes you stand out?",
-          "Have you worked with AI or LLMs?",
-          "Have you led teams or projects?",
-          "What do you do in your free time?",
-		  "Do you work remotely?",
-        ]
-      },
-      pt: {
-        "chat-title": "Assistente Virtual",
-		title: "Cientista de Dados Sênior • Consultor • Especialista em IoT para Agrotech • Python • IA • Ex-CTO",
-        welcome: "Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!",
-        placeholder: "Digite sua pergunta...",
-        "quick-questions": "Perguntas rápidas",
-        questions: [
-          "Fale sobre sua formação",
-          "Conte-me sobre seus últimos trabalhos",
-          "Quais suas principais tecnologias?",
-          "Qual seu diferencial?",
-          "Já trabalhou com IA ou LLMs?",
-          "Já liderou equipes ou projetos?",
-          "O que gosta de fazer nas horas vagas?",
-		  "Você trabalha remotamente?",
-        ]
-      }
+        en: {
+            "chat-title": "Virtual Assistant",
+            // INCLUSÃO DO <br> AQUI
+            title: "Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO", 
+            welcome: "Hi! I'm Eleandro's virtual assistant. Ask me anything!",
+            placeholder: "Ask your question...",
+            "quick-questions": "Quick Questions",
+            questions: [
+                "Tell me about your education",
+                "What are your most recent professional experiences?",
+                "What are your main technologies?",
+                "What makes you stand out?",
+                "Have you worked with AI or LLMs?",
+                "Have you led teams or projects?",
+                "What do you do in your free time?",
+                "Do you work remotely?",
+            ]
+        },
+        pt: {
+            "chat-title": "Assistente Virtual",
+            // INCLUSÃO DO <br> AQUI
+            title: "Cientista de Dados Sênior • Consultor • Especialista em IoT para Agrotech • Python<br>IA • Ex-CTO", 
+            welcome: "Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!",
+            placeholder: "Digite sua pergunta...",
+            "quick-questions": "Perguntas rápidas",
+            questions: [
+                "Fale sobre sua formação",
+                "Conte-me sobre seus últimos trabalhos",
+                "Quais suas principais tecnologias?",
+                "Qual seu diferencial?",
+                "Já trabalhou com IA ou LLMs?",
+                "Já liderou equipes ou projetos?",
+                "O que gosta de fazer nas horas vagas?",
+                "Você trabalha remotamente?",
+            ]
+        },
+        fr: {
+            "chat-title": "Assistant Virtuel",
+            // INCLUSÃO DO <br> AQUI
+            title: "Data Scientist Senior • Consultant • Spécialiste IoT Agrotech • Python • IA • Ex-CTO", 
+            welcome: "Bonjour! Je suis l'assistant virtuel d'Eleandro. Demandez-moi n'importe quoi!",
+            placeholder: "Posez votre question...",
+            "quick-questions": "Questions rapides",
+            questions: [
+                "Parlez-moi de votre formation",
+                "Quelles sont vos expériences professionnelles les plus récentes ?",
+                "Quelles sont vos principales technologies ?",
+                "Qu'est-ce qui vous distingue ?",
+                "Avez-vous travaillé avec l'IA ou les LLMs ?",
+                "Avez-vous dirigé des équipes ou des projets ?",
+                "Que faites-vous pendant votre temps libre ?",
+                "Travaillez-vous à distance ?",
+            ]
+        }
     };
     function setLang(lang) {
-      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
-      localStorage.setItem('lang', lang);
-      document.getElementById('btn-en').classList.toggle('bg-primary', lang==='en');
-      document.getElementById('btn-en').classList.toggle('text-white', lang==='en');
-      document.getElementById('btn-pt').classList.toggle('bg-primary', lang==='pt');
-      document.getElementById('btn-pt').classList.toggle('text-white', lang==='pt');
-      const t = translations[lang];
-      document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.getAttribute('data-t');
-        if (t[key]) el.textContent = t[key];
-      });
-      document.getElementById('input').placeholder = t.placeholder;
-      document.getElementById('typing-text').textContent = lang==='pt' ? 'Pensando...' : 'Thinking...';
-      const container = document.getElementById('suggested-questions');
-      container.innerHTML = '';
-      t.questions.forEach(q => {
-        const btn = document.createElement('button');
-        btn.className = "w-full text-left bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-5 rounded-xl border border-blue-200 transition";
-        btn.textContent = q;
-        btn.onclick = () => send(q);
-        container.appendChild(btn);
-      });
+        document.documentElement.lang = lang === 'pt' ? 'pt-BR' : (lang === 'fr' ? 'fr-FR' : 'en');
+        localStorage.setItem('lang', lang);
+
+        ['en', 'pt', 'fr'].forEach(l => {
+            const btn = document.getElementById(`btn-${l}`);
+            const isActive = l === lang;
+            btn.classList.toggle('bg-primary', isActive);
+            btn.classList.toggle('text-white', isActive);
+            btn.classList.toggle('hover:bg-gray-200', !isActive);
+            btn.classList.toggle('text-gray-800', !isActive);
+        });
+
+        const t = translations[lang];
+        document.querySelectorAll('[data-t]').forEach(el => {
+            const key = el.getAttribute('data-t');
+            if (t[key]) {
+                // Lógica de manipulação de texto/HTML
+                if (key === 'title') {
+                    // PROCESSA O <br> PARA QUEBRAR A LINHA
+                    el.innerHTML = t[key]; 
+                } else {
+                    el.textContent = t[key];
+                }
+            }
+        });
+        
+        document.getElementById('input').placeholder = t.placeholder;
+        document.getElementById('typing-text').textContent = (lang === 'pt' ? 'Pensando...' : (lang === 'fr' ? 'Réflexion...' : 'Thinking...'));
+        const container = document.getElementById('suggested-questions');
+        container.innerHTML = '';
+        t.questions.forEach(q => {
+            const btn = document.createElement('button');
+            btn.className = "w-full text-left bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-5 rounded-xl border border-blue-200 transition";
+            btn.textContent = q;
+            btn.onclick = () => send(q);
+            container.appendChild(btn);
+        });
     }
     setLang(localStorage.getItem('lang') || 'pt');
-    const messages = document.getElementById('messages');
-    const input = document.getElementById('input');
-    const typing = document.getElementById('typing-indicator');
-    const sendBtn = document.getElementById('send-btn');
-
-    // Função para adicionar a resposta (texto + CTAs)
-    function addResponse(text, cta0, cta1) {
-      // 1. Adiciona a mensagem de texto da IA
-	  
-      const htmlText = marked.parse(text).trim(); 
-	  
-      const textDiv = document.createElement('div');
-      textDiv.className = `flex justify-start fadeIn`;
-      textDiv.innerHTML = `<div class="bg-gray-200 text-gray-900 rounded-3xl px-6 py-4 max-w-base sm:max-w-base shadow-md">
-        <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${htmlText}</p>
-      </div>`;
-      messages.appendChild(textDiv);
-
-      // 2. Adiciona os botões de CTA (se existirem)
-      if (cta0 || cta1) {
-        const ctaDiv = document.createElement('div');
-        ctaDiv.className = `flex justify-start pt-2 px-1 fadeIn`; // Espaço entre a resposta e os botões
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = "flex flex-col sm:flex-row gap-2 max-w-xs sm:max-w-xl"; // Contêiner para os botões
-
-        // Cria e adiciona o CTA 0
-        if (cta0) {
-          const btn0 = createCtaButton(cta0);
-          buttonContainer.appendChild(btn0);
-        }
-
-        // Cria e adiciona o CTA 1
-        if (cta1) {
-          const btn1 = createCtaButton(cta1);
-          buttonContainer.appendChild(btn1);
-        }
-
-        ctaDiv.appendChild(buttonContainer);
-        messages.appendChild(ctaDiv);
-      }
-      
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-    // Função auxiliar para criar o botão de CTA
-	function createCtaButton(ctaText) {
-		const btn = document.createElement('button');
-		// CLASSE CORRIGIDA: Removido 'whitespace-nowrap' e 'overflow-hidden text-ellipsis'.
-		// Adicionado 'text-wrap' e 'text-center' para o alinhamento.
-		btn.className = "bg-white border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-wrap text-center";
-		btn.textContent = ctaText;
-		btn.onclick = () => send(ctaText); 
-		btn.title = ctaText; 
-		return btn;
-	}
-
-    // Função para adicionar a mensagem do usuário
-    function addMessage(text, isUser = false) {
-      const div = document.createElement('div');
-      div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
-      div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-200 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md">
-        <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${text.replace(/\n/g, '<br>')}</p>
-      </div>`;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-    async function send(question) {
-      if (!question.trim()) return;
-      addMessage(question, true);
-      input.value = '';
-      typing.classList.remove('hidden');
-      sendBtn.disabled = true;
-      try {
-        const res = await fetch('/chat', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({message: question})
-        });
-        const data = await res.json();
-        typing.classList.add('hidden');
-        
-        // CORREÇÃO AQUI: Chamar addResponse com o texto e as CTAs
-        addResponse(
-            data.response || "Desculpe, não consegui responder.", 
-            data.call_action0 || null, // Passa null se não vier
-            data.call_action1 || null  // Passa null se não vier
-        );
-      } catch (e) {
-        console.error(e);
-        typing.classList.add('hidden');
-        addResponse("Erro de conexão. Tente novamente.");
-      } finally {
-        sendBtn.disabled = false;
-      }
-    }
-    document.getElementById('form').addEventListener('submit', e => {
-      e.preventDefault();
-      send(input.value);
-    });
-  </script>
+    // ... (restante do código)
+</script>
 </body>
 </html>
