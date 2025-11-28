@@ -1,16 +1,25 @@
-# 1. Usa uma imagem leve do Python
+# Stage 1: Builder (instala deps)
+FROM python:3.10-slim AS builder
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Stage 2: Runtime (leve, sem GCP)
 FROM python:3.10-slim
 
-# 2. Define a pasta de trabalho dentro do container
 WORKDIR /app
 
-# 3. Copia o arquivo de requisitos e instala as dependências
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copia só o necessário do builder
+COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
-# 4. Copia o restante do seu código para dentro do container
+# Copia código do app
 COPY . .
 
-# 5. Comando para iniciar o FastAPI
-# O Google Cloud Run define a variável de ambiente $PORT automaticamente
-CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}
+# Expõe porta
+EXPOSE 8000
+
+# Roda com uvicorn (sem reload pra prod)
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
