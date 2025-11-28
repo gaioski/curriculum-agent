@@ -6,20 +6,20 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Stage 2: Runtime (leve, sem GCP)
+# Stage 2: Runtime (leve)
 FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copia só o necessário do builder
+# Copia deps do builder
 COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-# Copia código do app
+# Copia código
 COPY . .
 
-# Expõe porta
-EXPOSE 8000
+# Expõe $PORT (padrão 8080 no GCP)
+EXPOSE $PORT
 
-# Roda com uvicorn (sem reload pra prod)
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD dinâmico: usa $PORT (8080 no GCP, 8000 local se você setar)
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $${PORT:-8000}"]
