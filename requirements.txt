@@ -1,6 +1,6 @@
-fastapi
-uvicorn
-python-dotenv
-xai-sdk[all]==2.4.6
-jinja2
-google-cloud-logging
+fastapi==0.115.2
+uvicorn[standard]==0.32.0
+python-dotenv==1.0.1
+Jinja2==3.1.4
+xai-sdk==1.4.0  # Versão oficial atual - sem [all], pois extras são opcionais
+python-multipart==0.0.9
