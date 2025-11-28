@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
+    body {
+      transition: background-image 1.4s ease-in-out;
+    }
     #messages { scrollbar-width: thin; }
     #messages::-webkit-scrollbar { width: 6px; }
     #messages::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
@@ -23,309 +26,271 @@
     .b3 { animation: bounce 1.4s infinite 0.4s; }
     @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
     .fadeIn { animation: fadeIn 0.4s ease-out; }
-  </style>
-  <style>
-    #messages { scrollbar-width: thin; }
-    #messages::-webkit-scrollbar { width: 6px; }
-    #messages::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
-    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-    .b1 { animation: bounce 1.4s infinite; }
-    .b2 { animation: bounce 1.4s infinite 0.2s; }
-    .b3 { animation: bounce 1.4s infinite 0.4s; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-    .fadeIn { animation: fadeIn 0.4s ease-out; }
-    
-    /* 🌟 NOVO: Estilos para melhorar a leitura de elementos Markdown dentro da bolha */
+
     .bg-gray-200 > p > ul,
-    .bg-gray-200 > p > ol {
-      /* Adiciona espaçamento interno para listas */
-      padding-left: 1.5rem; /* 6px */
-      margin-top: 0.5rem; /* 8px */
-    }
-
+    .bg-gray-200 > p > ol { padding-left: 1.5rem; margin-top: 0.5rem; }
     .bg-gray-200 > p > ul > li,
-    .bg-gray-200 > p > ol > li {
-        /* Adiciona espaçamento entre itens da lista */
-        margin-bottom: 0.25rem; /* 4px */
-    }
-
+    .bg-gray-200 > p > ol > li { margin-bottom: 0.25rem; }
     .bg-gray-200 > p > pre {
-        /* Estilo para blocos de código */
-        background-color: #e2e8f0; /* gray-200, mas mais escuro */
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-        overflow-x: auto;
-        font-size: 0.9em;
+      background-color: #e2e8f0;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.9em;
     }
-  </style>
+  </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen flex flex-col text-gray-800">
-  
-	<header class="bg-white shadow-lg border-b z-50">
-		<div class="max-w-7xl mx-auto px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
-		  <div class="flex items-center gap-4 w-full lg:w-auto justify-center lg:justify-start">
-			<img src="/static/images/foto-perfil.jpg" alt="Eleandro Gaioski" class="w-16 h-16 sm:w-16 sm:h-16 rounded-full ring-4 ring-primary/30 object-cover">    
-			<div>
-			  <h1 class="text-2xl sm:text-3xl font-bold text-dark">Eleandro Gaioski</h1>
-			  <p class="text-base text-primary" data-t="title">Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO</p>
-			</div>
-		  </div>
-		  <div class="flex flex-col sm:flex-row items-center gap-4">
-			<div class="flex bg-gray-100 rounded-full p-1 shadow-md">
-			  <button onclick="setLang('en')" id="btn-en" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition hover:bg-gray-200">
-				<img src="https://flagcdn.com/16x12/us.png" alt="EN"> EN
-			  </button>
-			  <button onclick="setLang('fr')" id="btn-fr" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition hover:bg-gray-200">
-				<img src="https://flagcdn.com/16x12/fr.png" alt="FR"> FR
-			  </button>
-			  <button onclick="setLang('pt')" id="btn-pt" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 bg-primary text-white transition">
-				<img src="https://flagcdn.com/16x12/br.png" alt="PT"> PT
-			  </button>
-			</div>
-			<div class="grid grid-cols-2 gap-2 w-full sm:w-auto"> 
-				<a href="https://linkedin.com/in/gaioski" target="_blank" class="bg-[#0077b5] hover:bg-[#005582] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 transition shadow-sm whitespace-nowrap"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-				<a href="https://github.com/gaioski" target="_blank" class="bg-[#333] hover:bg-black text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 transition shadow-sm whitespace-nowrap"><i class="fab fa-github"></i> GitHub</a>
-				<a href="mailto:gaioski@gmail.com" class="bg-[#db4437] hover:bg-[#c53929] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 transition shadow-sm whitespace-nowrap"><i class="fas fa-envelope"></i> Email</a>
-				<a href="https://wa.me/5541988633383" target="_blank" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 transition shadow-sm whitespace-nowrap"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-			</div>
-		  </div>
-		</div>
-  </header>
-  
-  
+<body class="min-h-screen flex flex-col text-gray-800">
+
+<header class="bg-white shadow-lg border-b z-50">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-4 w-full lg:w-auto justify-center lg:justify-start">
+      <img src="/static/images/foto-perfil.jpg" alt="Eleandro Gaioski" class="w-16 h-16 rounded-full ring-4 ring-primary/30 object-cover">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-dark">Eleandro Gaioski</h1>
+        <p class="text-base text-primary" data-t="title">Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO</p>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center gap-4">
+      <div class="flex bg-gray-100 rounded-full p-1 shadow-md">
+        <button onclick="setLang('en')" id="btn-en" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition hover:bg-gray-200">
+          <img src="https://flagcdn.com/16x12/us.png" alt="EN"> EN
+        </button>
+        <button onclick="setLang('fr')" id="btn-fr" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-gray-200">
+          <img src="https://flagcdn.com/16x12/fr.png" alt="FR"> FR
+        </button>
+        <button onclick="setLang('pt')" id="btn-pt" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 bg-primary text-white">
+          <img src="https://flagcdn.com/16x12/br.png" alt="PT"> PT
+        </button>
+      </div>
+      <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+        <a href="https://linkedin.com/in/gaioski" target="_blank" class="bg-[#0077b5] hover:bg-[#005582] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+        <a href="https://github.com/gaioski" target="_blank" class="bg-[#333] hover:bg-black text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-github"></i> GitHub</a>
+        <a href="mailto:gaioski@gmail.com" class="bg-[#db4437] hover:bg-[#c53929] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-envelope"></i> Email</a>
+        <a href="https://wa.me/5541988633383" target="_blank" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</header>
+
 <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-    
-    <div class="lg:col-span-2 bg-white rounded-3xl shadow-2xl flex flex-col" style="height: calc(100vh - 180px);">
-      <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-4 text-center rounded-t-3xl">
-        <h2 class="text-lg font-bold" data-t="chat-title">Assistente Virtual</h2>
+  <div class="lg:col-span-2 bg-white rounded-3xl shadow-2xl flex flex-col" style="height: calc(100vh - 180px);">
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-4 text-center rounded-t-3xl">
+      <h2 class="text-lg font-bold" data-t="chat-title">Assistente Virtual</h2>
+    </div>
+    <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div class="text-center text-gray-600 italic text-sm" data-t="welcome">
+        Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!
       </div>
-      
-      <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-        <div class="text-center text-gray-600 italic text-sm" data-t="welcome">
-          Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!
-        </div>
-      </div>
-      
-      <div id="typing-indicator" class="hidden p-4">
-        <div class="flex justify-start">
-          <div class="bg-gray-200 rounded-3xl px-6 py-3 shadow-md flex items-center gap-3">
-            <div class="flex space-x-2"><div class="w-3 h-3 bg-gray-600 rounded-full b1"></div><div class="w-3 h-3 bg-gray-600 rounded-full b2"></div><div class="w-3 h-3 bg-gray-600 rounded-full b3"></div></div>
-            <span id="typing-text" class="text-gray-700 font-medium">Pensando...</span>
+    </div>
+    <div id="typing-indicator" class="hidden p-4">
+      <div class="flex justify-start">
+        <div class="bg-gray-200 rounded-3xl px-6 py-3 shadow-md flex items-center gap-3">
+          <div class="flex space-x-2">
+            <div class="w-3 h-3 bg-gray-600 rounded-full b1"></div>
+            <div class="w-3 h-3 bg-gray-600 rounded-full b2"></div>
+            <div class="w-3 h-3 bg-gray-600 rounded-full b3"></div>
           </div>
+          <span id="typing-text" class="text-gray-700 font-medium">Pensando...</span>
         </div>
       </div>
-      
-      <div class="p-4 bg-white border-t border-gray-200 rounded-b-3xl">
-        <form id="form" class="flex gap-3">
-          <input type="text" id="input" placeholder="Digite sua pergunta..." class="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-4 focus:ring-primary/30 text-base shadow-sm">
-          <button type="submit" id="send-btn" class="bg-primary hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition transform hover:scale-105">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </button>
-        </form>
-      </div>
     </div>
-
-    <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-200 overflow-y-auto flex flex-col" style="height: calc(100vh - 180px);">
-      <h3 class="font-bold text-lg mb-4 sticky top-0 bg-white pb-2 border-b border-gray-100" data-t="quick-questions">Perguntas rápidas</h3>
-      <div id="suggested-questions" class="space-y-3 flex-1"></div>
+    <div class="p-4 bg-white border-t border-gray-200 rounded-b-3xl">
+      <form id="form" class="flex gap-3">
+        <input type="text" id="input" placeholder="Digite sua pergunta..." class="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-4 focus:ring-primary/30 text-base shadow-sm">
+        <button type="submit" id="send-btn" class="bg-primary hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition transform hover:scale-105">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </button>
+      </form>
     </div>
+  </div>
 
-  </main>
+  <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-200 overflow-y-auto flex flex-col" style="height: calc(100vh - 180px);">
+    <h3 class="font-bold text-lg mb-4 sticky top-0 bg-white pb-2 border-b border-gray-100" data-t="quick-questions">Perguntas rápidas</h3>
+    <div id="suggested-questions" class="space-y-3 flex-1"></div>
+  </div>
+</main>
+
+
+<script>
+  const translations = {
+    en: { "chat-title": "Virtual Assistant", title: "Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO", welcome: "Hi! I'm Eleandro's virtual assistant. Ask me anything!", placeholder: "Ask your question...", "quick-questions": "Quick Questions", questions: ["Tell me about your education","What are your most recent professional experiences?","What are your main technologies?","What makes you stand out?","Have you worked with AI or LLMs?","Have you led teams or projects?","What do you do in your free time?","Do you work remotely?"] },
+    pt: { "chat-title": "Assistente Virtual", title: "Cientista de Dados Sênior • Consultor • Especialista em IoT para Agrotech • Python<br>IA • Ex-CTO", welcome: "Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!", placeholder: "Digite sua pergunta...", "quick-questions": "Perguntas rápidas", questions: ["Fale sobre sua formação","Conte-me sobre seus últimos trabalhos","Quais suas principais tecnologias?","Qual seu diferencial?","Já trabalhou com IA ou LLMs?","Já liderou equipes ou projetos?","O que gosta de fazer nas horas vagas?","Você trabalha remotamente?"] },
+    fr: { "chat-title": "Assistant Virtuel", title: "Data Scientist Senior • Consultant • Spécialiste IoT Agrotech • Python • IA • Ex-CTO", welcome: "Bonjour! Je suis l'assistant virtuel d'Eleandro. Demandez-moi n'importe quoi!", placeholder: "Posez votre question...", "quick-questions": "Questions rapides", questions: ["Parlez-moi de votre formation","Quelles sont vos expériences professionnelles les plus récentes ?","Quelles sont vos principales technologies ?","Qu'est-ce qui vous distingue ?","Avez-vous travaillé avec l'IA ou les LLMs ?","Avez-vous dirigé des équipes ou des projets ?","Que faites-vous pendant votre temps libre ?","Travaillez-vous à distance ?"] }
+  };
+
+  // === INFOGRÁFICOS POR IDIOMA ===
+  const backgroundByLang = {
+    'pt': '/static/images/infographic_pt.png',
+    'en': '/static/images/infographic_en.png',
+    'fr': '/static/images/infographic_fr.png'
+  };
+
+  let currentBackgroundType = 'infographic'; // 'infographic' ou 'flux'
+
+function setInfographicBackground(lang) {
+  const url = backgroundByLang[lang] || backgroundByLang['pt'];
   
-  <script>
-    const translations = {
-      en: {
-        "chat-title": "Virtual Assistant",
-		title: "Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO",
-        welcome: "Hi! I'm Eleandro's virtual assistant. Ask me anything!",
-        placeholder: "Ask your question...",
-        "quick-questions": "Quick Questions",
-        questions: [
-          "Tell me about your education",
-          "What are your most recent professional experiences?",
-          "What are your main technologies?",
-          "What makes you stand out?",
-          "Have you worked with AI or LLMs?",
-          "Have you led teams or projects?",
-          "What do you do in your free time?",
-		  "Do you work remotely?",
-        ]
-      },
-      pt: {
-        "chat-title": "Assistente Virtual",
-		title: "Cientista de Dados Sênior • Consultor • Especialista em IoT para Agrotech • Python<br>IA • Ex-CTO",
-        welcome: "Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!",
-        placeholder: "Digite sua pergunta...",
-        "quick-questions": "Perguntas rápidas",
-        questions: [
-          "Fale sobre sua formação",
-          "Conte-me sobre seus últimos trabalhos",
-          "Quais suas principais tecnologias?",
-          "Qual seu diferencial?",
-          "Já trabalhou com IA ou LLMs?",
-          "Já liderou equipes ou projetos?",
-          "O que gosta de fazer nas horas vagas?",
-		  "Você trabalha remotamente?",
-        ]
-      },
-	  fr: {
-        "chat-title": "Assistant Virtuel",
-		title: "Data Scientist Senior • Consultant • Spécialiste IoT Agrotech • Python • IA • Ex-CTO",
-        welcome: "Bonjour! Je suis l'assistant virtuel d'Eleandro. Demandez-moi n'importe quoi!",
-        placeholder: "Posez votre question...",
-        "quick-questions": "Questions rapides",
-        questions: [
-          "Parlez-moi de votre formation",
-          "Quelles sont vos expériences professionnelles les plus récentes ?",
-          "Quelles sont vos principales technologies ?",
-          "Qu'est-ce qui vous distingue ?",
-          "Avez-vous travaillé avec l'IA ou les LLMs ?",
-          "Avez-vous dirigé des équipes ou des projets ?",
-          "Que faites-vous pendant votre temps libre ?",
-		  "Travaillez-vous à distance ?",
-        ]
-      }
-    };
-    function setLang(lang) {
-      // CORRIGIDO: Agora verifica 'fr' para definir o atributo lang
-      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : (lang === 'fr' ? 'fr-FR' : 'en');
-      localStorage.setItem('lang', lang);
+  // Fundo com imagem + overlay preto 50% de opacidade
+  document.body.style.background = `
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('${url}') 
+    center/cover fixed no-repeat
+  `;
+  currentBackgroundType = 'infographic';
+}
 
-      // ATUALIZADO: Lógica para gerenciar os 3 botões (en, pt, fr)
-      ['en', 'pt', 'fr'].forEach(l => {
-        const btn = document.getElementById(`btn-${l}`);
-        const isActive = l === lang;
-        btn.classList.toggle('bg-primary', isActive);
-        btn.classList.toggle('text-white', isActive);
-        btn.classList.toggle('hover:bg-gray-200', !isActive);
-        btn.classList.toggle('text-gray-800', !isActive); // Adiciona cor padrão de texto para inativos
-      });
-      const t = translations[lang];
-      document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.getAttribute('data-t');
-                    if (t[key]) {
-                // Lógica de manipulação de texto/HTML
-                if (key === 'title') {
-                    // PROCESSA O <br> PARA QUEBRAR A LINHA
-                    el.innerHTML = t[key]; 
-                } else {
-                    el.textContent = t[key];
-                }
-            }
-      });
-      document.getElementById('input').placeholder = t.placeholder;
-      document.getElementById('typing-text').textContent = lang==='pt' ? 'Pensando...' : 'Thinking...';
-      const container = document.getElementById('suggested-questions');
-      container.innerHTML = '';
-      t.questions.forEach(q => {
-        const btn = document.createElement('button');
-        btn.className = "w-full text-left bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-5 rounded-xl border border-blue-200 transition";
-        btn.textContent = q;
-        btn.onclick = () => send(q);
-        container.appendChild(btn);
-      });
-    }
-    setLang(localStorage.getItem('lang') || 'pt');
-    const messages = document.getElementById('messages');
-    const input = document.getElementById('input');
-    const typing = document.getElementById('typing-indicator');
-    const sendBtn = document.getElementById('send-btn');
+function setFluxBackground(url) {
+  if (!url) {
+    const lang = localStorage.getItem('lang') || 'pt';
+    setInfographicBackground(lang);
+    return;
+  }
 
-    // Função para adicionar a resposta (texto + CTAs)
-    function addResponse(text, cta0, cta1) {
-      // 1. Adiciona a mensagem de texto da IA
-	  
-      const htmlText = marked.parse(text).trim(); 
-	  
-      const textDiv = document.createElement('div');
-      textDiv.className = `flex justify-start fadeIn`;
-      textDiv.innerHTML = `<div class="bg-gray-200 text-gray-900 rounded-3xl px-6 py-4 max-w-base sm:max-w-base shadow-md">
-        <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${htmlText}</p>
-      </div>`;
-      messages.appendChild(textDiv);
+  // Imagem do Flux com overlay um pouco mais claro (pra ficar lindo com fotos)
+  document.body.style.background = `
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+    url('${url}') 
+    center/cover fixed no-repeat
+  `;
+  currentBackgroundType = 'flux';
+}
 
-      // 2. Adiciona os botões de CTA (se existirem)
-      if (cta0 || cta1) {
-        const ctaDiv = document.createElement('div');
-        ctaDiv.className = `flex justify-start pt-2 px-1 fadeIn`; // Espaço entre a resposta e os botões
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = "flex flex-col sm:flex-row gap-2 max-w-xs sm:max-w-xl"; // Contêiner para os botões
+  function setLang(lang) {
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : (lang === 'fr' ? 'fr-FR' : 'en');
+    localStorage.setItem('lang', lang);
 
-        // Cria e adiciona o CTA 0
-        if (cta0) {
-          const btn0 = createCtaButton(cta0);
-          buttonContainer.appendChild(btn0);
-        }
-
-        // Cria e adiciona o CTA 1
-        if (cta1) {
-          const btn1 = createCtaButton(cta1);
-          buttonContainer.appendChild(btn1);
-        }
-
-        ctaDiv.appendChild(buttonContainer);
-        messages.appendChild(ctaDiv);
-      }
-      
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-    // Função auxiliar para criar o botão de CTA
-	function createCtaButton(ctaText) {
-		const btn = document.createElement('button');
-		// CLASSE CORRIGIDA: Removido 'whitespace-nowrap' e 'overflow-hidden text-ellipsis'.
-		// Adicionado 'text-wrap' e 'text-center' para o alinhamento.
-		btn.className = "bg-white border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-wrap text-center";
-		btn.textContent = ctaText;
-		btn.onclick = () => send(ctaText); 
-		btn.title = ctaText; 
-		return btn;
-	}
-
-    // Função para adicionar a mensagem do usuário
-    function addMessage(text, isUser = false) {
-      const div = document.createElement('div');
-      div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
-      div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-200 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md">
-        <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${text.replace(/\n/g, '<br>')}</p>
-      </div>`;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-    async function send(question) {
-      if (!question.trim()) return;
-      addMessage(question, true);
-      input.value = '';
-      typing.classList.remove('hidden');
-      sendBtn.disabled = true;
-      try {
-        const res = await fetch('/chat', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({message: question})
-        });
-        const data = await res.json();
-        typing.classList.add('hidden');
-        
-        // CORREÇÃO AQUI: Chamar addResponse com o texto e as CTAs
-        addResponse(
-            data.response || "Desculpe, não consegui responder.", 
-            data.call_action0 || null, // Passa null se não vier
-            data.call_action1 || null  // Passa null se não vier
-        );
-      } catch (e) {
-        console.error(e);
-        typing.classList.add('hidden');
-        addResponse("Erro de conexão. Tente novamente.");
-      } finally {
-        sendBtn.disabled = false;
-      }
-    }
-    document.getElementById('form').addEventListener('submit', e => {
-      e.preventDefault();
-      send(input.value);
+    // botões
+    ['en','pt','fr'].forEach(l => {
+      const btn = document.getElementById(`btn-${l}`);
+      const active = l === lang;
+      btn.classList.toggle('bg-primary', active);
+      btn.classList.toggle('text-white', active);
+      btn.classList.toggle('hover:bg-gray-200', !active);
+      btn.classList.toggle('text-gray-800', !active);
     });
-  </script>
+
+    const t = translations[lang];
+    document.querySelectorAll('[data-t]').forEach(el => {
+      const k = el.dataset.t;
+      if (t[k]) {
+        if (k === 'title') el.innerHTML = t[k];
+        else el.textContent = t[k];
+      }
+    });
+
+    document.getElementById('input').placeholder = t.placeholder;
+    document.getElementById('typing-text').textContent = lang==='pt' ? 'Pensando...' : (lang==='fr' ? 'Réfléchissant...' : 'Thinking...');
+
+    // perguntas rápidas
+    const container = document.getElementById('suggested-questions');
+    container.innerHTML = '';
+    t.questions.forEach(q => {
+      const b = document.createElement('button');
+      b.className = "w-full text-left bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-5 rounded-xl border border-blue-200 transition";
+      b.textContent = q;
+      b.onclick = () => send(q);
+      container.appendChild(b);
+    });
+
+    // troca o infográfico se não estiver com imagem do Flux
+    if (currentBackgroundType !== 'flux') {
+      setInfographicBackground(lang);
+    }
+  }
+
+  // === ELEMENTOS DO DOM ===
+  const messages = document.getElementById('messages');
+  const input     = document.getElementById('input');
+  const typing    = document.getElementById('typing-indicator');
+  const sendBtn   = document.getElementById('send-btn');
+
+  // === FUNÇÕES DO CHAT ===
+  function addMessage(text, isUser = false) {
+    const div = document.createElement('div');
+    div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
+    div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-200 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md">
+      <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${text.replace(/\n/g, '<br>')}</p>
+    </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function createCtaButton(text) {
+    const btn = document.createElement('button');
+    btn.className = "bg-white border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-center";
+    btn.textContent = text;
+    btn.onclick = () => send(text);
+    return btn;
+  }
+
+  function addResponse(text, cta0, cta1) {
+    const html = marked.parse(text).trim();
+    const div = document.createElement('div');
+    div.className = 'flex justify-start fadeIn';
+    div.innerHTML = `<div class="bg-gray-200 text-gray-900 rounded-3xl px-6 py-4 max-w-base sm:max-w-2xl shadow-md">
+      <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${html}</p>
+    </div>`;
+    messages.appendChild(div);
+
+    if (cta0 || cta1) {
+      const cdiv = document.createElement('div');
+      cdiv.className = 'flex justify-start pt-2 fadeIn';
+      const wrap = document.createElement('div');
+      wrap.className = 'flex flex-col sm:flex-row gap-2';
+      if (cta0) wrap.appendChild(createCtaButton(cta0));
+      if (cta1) wrap.appendChild(createCtaButton(cta1));
+      cdiv.appendChild(wrap);
+      messages.appendChild(cdiv);
+    }
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  async function send(question) {
+    if (!question.trim()) return;
+    addMessage(question, true);
+    input.value = '';
+    typing.classList.remove('hidden');
+    sendBtn.disabled = true;
+
+    try {
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: question})
+      });
+      const data = await res.json();
+      typing.classList.add('hidden');
+
+      addResponse(data.response || "Desculpe, não consegui responder.", data.call_action0, data.call_action1);
+
+      if (data.background_image) {
+        setFluxBackground(data.background_image);
+      } else {
+        const lang = localStorage.getItem('lang') || 'pt';
+        setInfographicBackground(lang);
+      }
+    } catch (e) {
+      console.error(e);
+      typing.classList.add('hidden');
+      addResponse("Erro de conexão. Tente novamente.");
+      const lang = localStorage.getItem('lang') || 'pt';
+      setInfographicBackground(lang);
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  // submit do form
+  document.getElementById('form').addEventListener('submit', e => {
+    e.preventDefault();
+    send(input.value);
+  });
+
+  // inicia com idioma salvo + infográfico correto
+  setLang(localStorage.getItem('lang') || 'pt');
+</script>
+
 </body>
 </html>

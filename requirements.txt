@@ -1,7 +1,6 @@
 fastapi
 uvicorn
 python-dotenv
-xai-sdk
+xai-sdk[all]==2.4.6
 jinja2
-pydantic
 google-cloud-logging

@@ -13,6 +13,8 @@ import sys
 import logging
 import re
 
+modelo = "grok-4-1-fast-reasoning"
+
 # ===================== LOGGING GOOGLE CLOUD =====================
 # Tenta configurar o logging do Google. Se falhar (rodando local), usa o padrão.
 try:
@@ -91,89 +93,88 @@ async def chat_endpoint(request: Request):
     try:
         data_req = await request.json()
         question = data_req.get("message", "").strip()
-
         if not question:
             return JSONResponse({"response": "Oi! Pode mandar sua pergunta sobre minha carreira."})
 
-        # Chamada à API xAI
+        # === 1. Gera texto com Grok (igual antes) ===
         chat = client_xai.chat.create(
-            model="grok-4-fast-reasoning",
+            model=modelo,
             messages=[
                 system(FULL_SYSTEM_PROMPT),
                 user(question)
             ],
         )
-
-        ## Processa resposta
-        #response = chat.sample()
-        #
-        ## Tenta fazer o parse do JSON retornado pela IA
-        #try:
-        #    answer_json = json.loads(response.content.strip())
-        #    answer_text = answer_json.get('resposta', "Sem resposta.")
-        #    cta_0 = answer_json.get('ctas', [None, None])[0]
-        #    cta_1 = answer_json.get('ctas', [None, None])[1]
-        #except json.JSONDecodeError:
-        #    # Fallback caso a IA não devolva JSON válido
-        #    answer_text = response.content.strip()
-        #    cta_0, cta_1 = None, None
-        #    logger.warning(f"Falha ao decodificar JSON da IA. Resposta crua: {answer_text}")
-            
-            
-        # Processa resposta da IA
         response = chat.sample()
         raw_content = response.content.strip()
 
-        # --- SOLUÇÃO DE LIMPEZA (REGEX) ---
-        # Procura pelo primeiro '{' e pelo último '}'
-        # Isso ignora qualquer ```json ou texto que venha antes ou depois
+        # === 2. Extrai JSON da resposta (seu código já perfeito) ===
         match = re.search(r'(\{.*\})', raw_content, re.DOTALL)
-        
         if match:
             json_str = match.group(1)
         else:
-            # Se não achar chaves, assume que é texto puro (fallback)
             json_str = raw_content
 
         try:
             answer_json = json.loads(json_str)
-            
-            # Pega os dados (com fallback seguro)
-            answer_text = answer_json.get('resposta', "Sem resposta.")
+            answer_text = answer_json.get('resposta', raw_content)
             ctas = answer_json.get('ctas', [])
-            
-            # Garante que ctas seja lista
-            if not isinstance(ctas, list): ctas = []
             cta_0 = ctas[0] if len(ctas) > 0 else None
             cta_1 = ctas[1] if len(ctas) > 1 else None
-
         except json.JSONDecodeError:
-            logger.error(f"FALHA JSON: {raw_content}")
-            # Se falhar tudo, devolve o texto cru para o usuário não ficar sem resposta
             answer_text = raw_content
             cta_0, cta_1 = None, None
-            logger.warning(f"Falha ao decodificar JSON da IA. Resposta crua: {answer_text}")
 
-        # -------------------------------------------------------
-        # 🌟 AQUI ESTÁ O SEGREDO DO LOG ESTRUTURADO 🌟
-        # -------------------------------------------------------
+
+        # === 3. Gera imagem com Flux (VERSÃO OFICIAL E SEM ERRO – DE ACORDO COM A DOC xAI) ===
+        image_url = None
+        should_generate_image = any(palavra in question.lower() for palavra in [
+            "foto", "imagem", "mostre", "mostra", "show", "photo", "picture", "visual", 
+            "projeto", "dashboard", "gráfico", "graph", "agrotech", "drone", "iot", "fazenda",
+            "farm", "campo", "máquina", "tractor", "plantação", "ia", "ai", "llm", "machine learning",
+            "python", "dados", "startup", "leadership", "team", "projeto"  # Cobrindo mais perguntas
+        ])
+
+        if False and should_generate_image:
+            try:
+                # Prompt direto em inglês (ótimo pro Flux)
+                flux_prompt = f"Professional, modern, photorealistic image related to the query: '{question}'. Theme: Data Science, Agrotech IoT, drones over soy farms, sensors in agriculture, Python code dashboards, AI agents, team leadership in startups, or Brazilian precision farming. Cinematic lighting, high quality, 8k, no text, no close-up people, neutral background for website use."
+                
+                # GERA A IMAGEM (EXATO DA DOC: client.image.sample() com image_format="url")
+                img_response = client_xai.image.sample(
+                    model="grok-2-image",  # Modelo oficial e estável pra imagens
+                    prompt=flux_prompt,
+                    image_format="url"  # Retorna URL pública (válida ~1h)
+                )
+                image_url = img_response.url  # ← DIRETO ASSIM, SEM data[]
+                
+                logger.info(f"Imagem gerada com sucesso para '{question}': {image_url}")
+                
+            except Exception as e:
+                logger.warning(f"Erro ao gerar imagem para '{question}': {e}")
+                image_url = None
+
+
+        # === 4. Log e retorno (igual antes, + imagem) ===
         log_payload = {
             "event_type": "chat_interaction",
             "user_question": question,
             "ai_response": answer_text,
             "cta_suggested": [cta_0, cta_1],
+            "image_generated": bool(image_url),
             "status": "success",
-            "model": "grok-4-fast-reasoning"
+            "model": modelo
         }
-        
-        # Ao enviar um JSON dump, o Google Cloud Logging faz o parse automático
-        # e coloca isso dentro de jsonPayload no console.
         logger.info(json.dumps(log_payload, ensure_ascii=False))
 
-        return JSONResponse({"response": answer_text, "call_action0": cta_0, "call_action1": cta_1})
+        return JSONResponse({
+            "response": answer_text,
+            "call_action0": cta_0,
+            "call_action1": cta_1,
+            "background_image": image_url  # ← Envia a URL pro frontend
+        })
 
     except Exception as e:
-        # Log de erro também estruturado
+        # Seu error handling...
         error_payload = {
             "event_type": "chat_error",
             "error_message": str(e),
@@ -189,10 +190,13 @@ async def chat_endpoint(request: Request):
 # Health check
 @app.get("/health")
 async def health():
-    return {"status": "ok", "model": "grok-4-fast-reasoning"}
+    return {"status": "ok", "model": modelo}
 
 # Startup message
 @app.on_event("startup")
 async def startup_event():
     print("\nEleandro Gaioski - Currículo com IA")
     print("Acesse: http://localhost:8000\n")
+    
+#para debug:
+#uvicorn main:app --host 0.0.0.0 --port 8000 --reload
