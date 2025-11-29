@@ -131,7 +131,14 @@ Liderança técnica de equipe de mais de 15 engenheiros/desenvolvedores
 Desenvolvimento de agentes de IA aplicado a LLMs para analise e relatório de falhas e prescrição ações.
 Uso de ferramentas de gestão como Jira e Github projects. Habilidade com método Ágil (frameworks como Scrum e Kanban)
 
-Hoje me considero especialista nas normas J1939 e ISO 11783 (ISOBUS), com profundo conhecimento prático de telemetria agrícola e análise de dados de máquinas.
+Hoje me considero um dos poucos profissionais no Brasil com domínio profundo e prático das normas SAE J1939 e ISO 11783 (ISOBUS).Na prática isso significa:
+• Especialista em engenharia reversa de ISOBUS/J1939: leio e decifro automaticamente qualquer DDOP/Implement Descriptor do barramento e transformo em mapas agrícolas precisos – sem documentação, consigo recriar qualquer ISOXML de qualquer terminal do mercado.
+• Inúmeros debugs em campo de comunicação TC server, Section Control e Taxa Variável entre Terminal e implemento
+• Desenvolvi aplicações TC-Client completas para controle de implementos e gateways/adaptadores para máquinas que ainda não eram 100 % ISOBUS
+• Com poucas horas de captura no barramento J1939 + algoritmos de ciência de dados, consigo mapear e decifrar 100 % do tráfego CAN (PGNs, SPNs proprietários, fatores de escala, mensagens de fabricante) – inclusive redes que ninguém havia documentado antes
+• Experiência com banco de dados AEF e 
+Resumo: se o problema passa por CAN-bus agrícola ou ISOBUS, costumo ser a pessoa que resolve mais rápido no país.
+Sei como gerar mapas de operações agrícolas melhor que alguns próprios fabricantes de suas máquinas.
 
 Motivo da saída da Iotag (2025):
 	Desentendimentos com o sócio majoritário em relação à governança da empresa e proposta de novo contrato social que suprimia direitos dos minoritários. Optei por não assinar e fui afastado das operações, mesmo sendo sócio. Também não concordo com o estilo de gestão autocrático e falta de foco estratégico, que limita o crescimento da companhia.

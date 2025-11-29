@@ -1,3 +1,4 @@
+
 # main.py
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -12,19 +13,24 @@ import os
 import sys
 import logging
 import re
+import base64  # Necessário para converter a imagem para o Frontend
 
-modelo = "grok-4-1-fast-reasoning"
+# Imports do Google GenAI
+from google import genai
+from google.genai import types
+
+# === DEFINIÇÃO DOS MODELOS ===
+modelo_chat = "grok-4-fast-reasoning"
+modelo_imagem = "imagen-4.0-fast-generate-001" 
 
 # ===================== LOGGING GOOGLE CLOUD =====================
-# Tenta configurar o logging do Google. Se falhar (rodando local), usa o padrão.
 try:
     import google.cloud.logging
     from google.cloud.logging.handlers import CloudLoggingHandler
     
-    # Instancia o cliente
-    client = google.cloud.logging.Client()
-    # Conecta o logger do Python ao Google Cloud Logging
-    client.setup_logging()
+    # Instancia o cliente de LOGS
+    logging_client = google.cloud.logging.Client()
+    logging_client.setup_logging()
     logging.info("Google Cloud Logging ativado com sucesso.")
 except ImportError:
     print("Biblioteca google-cloud-logging não encontrada. Usando log padrão.")
@@ -33,7 +39,7 @@ except Exception as e:
 
 # Configuração padrão do logger
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("curr-ia-logger") # Nome do logger para facilitar busca
+logger = logging.getLogger("curr-ia-logger")
 
 # ===================== CONFIGURAÇÃO =====================
 load_dotenv()
@@ -44,10 +50,9 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Força UTF-8 para encoding
+# Força UTF-8 para encoding no terminal
 sys.stdout.reconfigure(encoding='utf-8')
 
-# Permitir requisições do frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -56,7 +61,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pastas estáticas
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="static")
 
@@ -75,12 +79,18 @@ except FileNotFoundError as e:
     logger.error(f"Arquivo não encontrado: {e}")
     raise RuntimeError(f"Arquivo obrigatório ausente: {e}")
 
-# Cliente xAI
+# === INICIALIZAÇÃO DOS CLIENTES DE IA ===
+
+# 1. Cliente xAI (Para Texto e Refinamento de Prompt)
+if not os.getenv("XAI_API_KEY"):
+    raise RuntimeError("Configure a variável XAI_API_KEY no arquivo .env")
 client_xai = Client(api_key=os.getenv("XAI_API_KEY"))
 
-if not os.getenv("XAI_API_KEY"):
-    logger.error("XAI_API_KEY não encontrada no .env")
-    raise RuntimeError("Configure a variável XAI_API_KEY no arquivo .env")
+# 2. Cliente Google GenAI (Para Geração de Imagem)
+if not os.getenv("GEMINI_API_KEY"):
+    logger.warning("GEMINI_API_KEY não encontrada. Geração de imagens falhará.")
+client_genai = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
 
 # ===================== ROTAS =====================
 @app.get("/", response_class=HTMLResponse)
@@ -93,12 +103,16 @@ async def chat_endpoint(request: Request):
     try:
         data_req = await request.json()
         question = data_req.get("message", "").strip()
+        
+        # Resposta rápida para input vazio
         if not question:
             return JSONResponse({"response": "Oi! Pode mandar sua pergunta sobre minha carreira."})
 
-        # === 1. Gera texto com Grok (igual antes) ===
+        # =================================================================
+        # ETAPA 1: Gerar a Resposta em Texto (Chat com Usuário) - VIA xAI
+        # =================================================================
         chat = client_xai.chat.create(
-            model=modelo,
+            model=modelo_chat,
             messages=[
                 system(FULL_SYSTEM_PROMPT),
                 user(question)
@@ -107,12 +121,9 @@ async def chat_endpoint(request: Request):
         response = chat.sample()
         raw_content = response.content.strip()
 
-        # === 2. Extrai JSON da resposta (seu código já perfeito) ===
+        # Extrai JSON da resposta da LLM
         match = re.search(r'(\{.*\})', raw_content, re.DOTALL)
-        if match:
-            json_str = match.group(1)
-        else:
-            json_str = raw_content
+        json_str = match.group(1) if match else raw_content
 
         try:
             answer_json = json.loads(json_str)
@@ -125,44 +136,77 @@ async def chat_endpoint(request: Request):
             cta_0, cta_1 = None, None
 
 
-        # === 3. Gera imagem com Flux (VERSÃO OFICIAL E SEM ERRO – DE ACORDO COM A DOC xAI) ===
-        image_url = None
-        should_generate_image = any(palavra in question.lower() for palavra in [
-            "foto", "imagem", "mostre", "mostra", "show", "photo", "picture", "visual", 
-            "projeto", "dashboard", "gráfico", "graph", "agrotech", "drone", "iot", "fazenda",
-            "farm", "campo", "máquina", "tractor", "plantação", "ia", "ai", "llm", "machine learning",
-            "python", "dados", "startup", "leadership", "team", "projeto"  # Cobrindo mais perguntas
-        ])
-
-        if False and should_generate_image:
+        # =================================================================
+        # ETAPA 2: Lógica de Geração de Imagem - VIA GOOGLE IMAGEN
+        # =================================================================
+        image_url = None 
+        
+        # Se detectou palavra-chave (ou se quiser forçar, mude para: if True:)
+        if True: 
             try:
-                # Prompt direto em inglês (ótimo pro Flux)
-                flux_prompt = f"Professional, modern, photorealistic image related to the query: '{question}'. Theme: Data Science, Agrotech IoT, drones over soy farms, sensors in agriculture, Python code dashboards, AI agents, team leadership in startups, or Brazilian precision farming. Cinematic lighting, high quality, 8k, no text, no close-up people, neutral background for website use."
+                # --- PASSO 2.1: PEDIR AO GROK PARA CRIAR O PROMPT DA IMAGEM ---
+                # Isso garante que a imagem seja contextualizada e em inglês
+                logger.info("Step 2.1: Solicitando ao Grok um prompt visual otimizado...")
                 
-                # GERA A IMAGEM (EXATO DA DOC: client.image.sample() com image_format="url")
-                img_response = client_xai.image.sample(
-                    model="grok-2-image",  # Modelo oficial e estável pra imagens
-                    prompt=flux_prompt,
-                    image_format="url"  # Retorna URL pública (válida ~1h)
+                prompt_engineer_msg = (
+                    f"Aja como um especialista em Engenharia de Prompt para IA Generativa (Midjourney/Imagen). "
+                    f"O usuário perguntou: '{question}'. "
+                    f"Crie um prompt visual descritivo, EM INGLÊS, para ilustrar esse tópico. "
+                    f"Retorne APENAS o prompt em inglês."
                 )
-                image_url = img_response.url  # ← DIRETO ASSIM, SEM data[]
-                
-                logger.info(f"Imagem gerada com sucesso para '{question}': {image_url}")
-                
+
+                prompt_chat = client_xai.chat.create(
+                    model=modelo_chat,
+                    messages=[user(prompt_engineer_msg)], 
+                )
+                # O prompt "traduzido" e otimizado
+                imagen_prompt = prompt_chat.sample().content.strip()
+                logger.info(f"Prompt Visual Gerado: {imagen_prompt}")
+
+
+                # --- PASSO 2.2: ENVIAR O PROMPT OTIMIZADO PARA O GOOGLE IMAGEN ---
+                logger.info("Step 2.2: Gerando imagem com Google Imagen...")
+
+                response_img = client_genai.models.generate_images(
+                    model=modelo_imagem, 
+                    prompt=imagen_prompt,
+                    config=types.GenerateImagesConfig(
+                        number_of_images=1,
+                        aspect_ratio="16:9",
+                        # include_rai_reasoning removido para compatibilidade
+                    )
+                )
+
+                # --- PASSO 2.3: CONVERTER BYTES PARA BASE64 ---
+                for generated_image in response_img.generated_images:
+                    image_bytes = generated_image.image.image_bytes
+                    
+                    # Converte bytes para string base64
+                    base64_string = base64.b64encode(image_bytes).decode('utf-8')
+                    
+                    # Formata como Data URI
+                    image_url = f"data:image/png;base64,{base64_string}"
+                    logger.info("Imagem gerada e processada com sucesso.")
+                    break 
+
             except Exception as e:
-                logger.warning(f"Erro ao gerar imagem para '{question}': {e}")
+                logger.warning(f"Erro no fluxo de imagem: {e}")
+                # Não quebra a requisição, apenas fica sem imagem
                 image_url = None
 
 
-        # === 4. Log e retorno (igual antes, + imagem) ===
+        # =================================================================
+        # ETAPA 3: Montar Resposta Final e Logs
+        # =================================================================
         log_payload = {
             "event_type": "chat_interaction",
             "user_question": question,
-            "ai_response": answer_text,
+            "ai_response": answer_text[:50] + "...", # Loga só o começo pra não poluir
             "cta_suggested": [cta_0, cta_1],
             "image_generated": bool(image_url),
             "status": "success",
-            "model": modelo
+            "model_text": modelo_chat,
+            "model_image": modelo_imagem
         }
         logger.info(json.dumps(log_payload, ensure_ascii=False))
 
@@ -170,11 +214,10 @@ async def chat_endpoint(request: Request):
             "response": answer_text,
             "call_action0": cta_0,
             "call_action1": cta_1,
-            "background_image": image_url  # ← Envia a URL pro frontend
+            "background_image": image_url 
         })
 
     except Exception as e:
-        # Seu error handling...
         error_payload = {
             "event_type": "chat_error",
             "error_message": str(e),
@@ -190,13 +233,12 @@ async def chat_endpoint(request: Request):
 # Health check
 @app.get("/health")
 async def health():
-    return {"status": "ok", "model": modelo}
+    return {"status": "ok", "model": modelo_chat}
 
 # Startup message
 @app.on_event("startup")
 async def startup_event():
-    print("\nEleandro Gaioski - Currículo com IA")
-    print("Acesse: http://localhost:8000\n")
-    
-#para debug:
-#uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    print("\n========================================")
+    print("   Eleandro Gaioski - Currículo com IA")
+    print("   Servidor rodando em: http://localhost:8000")
+    print("========================================\n")

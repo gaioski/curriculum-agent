@@ -5,44 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Eleandro Gaioski - AI Resume</title>
   <meta name="description" content="Fale com meu assistente virtual"/>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: { extend: { colors: { primary: "#0ea5e9", dark: "#0f172a" } } }
     }
   </script>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
   <style>
     body {
       transition: background-image 1.4s ease-in-out;
+      background-attachment: fixed; 
+      background-size: cover;
+      background-position: center;
     }
+    
+    /* Scrollbar personalizada */
     #messages { scrollbar-width: thin; }
     #messages::-webkit-scrollbar { width: 6px; }
-    #messages::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
+    #messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+    
+    /* Animações */
     @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
     .b1 { animation: bounce 1.4s infinite; }
     .b2 { animation: bounce 1.4s infinite 0.2s; }
     .b3 { animation: bounce 1.4s infinite 0.4s; }
+    
     @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
     .fadeIn { animation: fadeIn 0.4s ease-out; }
 
-    .bg-gray-200 > p > ul,
-    .bg-gray-200 > p > ol { padding-left: 1.5rem; margin-top: 0.5rem; }
-    .bg-gray-200 > p > ul > li,
-    .bg-gray-200 > p > ol > li { margin-bottom: 0.25rem; }
-    .bg-gray-200 > p > pre {
-      background-color: #e2e8f0;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      overflow-x: auto;
-      font-size: 0.9em;
+    /* Estilos para Markdown */
+    .bg-gray-100 > p > ul, .bg-gray-100 > p > ol { padding-left: 1.5rem; margin-top: 0.5rem; }
+    .bg-gray-100 > p > ul > li, .bg-gray-100 > p > ol > li { margin-bottom: 0.25rem; }
+    .bg-gray-100 > p > pre {
+      background-color: #e2e8f0; padding: 0.75rem; border-radius: 0.5rem;
+      overflow-x: auto; font-size: 0.9em;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col text-gray-800">
 
-<header class="bg-white shadow-lg border-b z-50">
+<header class="bg-white/90 shadow-lg border-b border-white/40 z-50">
   <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
     <div class="flex items-center gap-4 w-full lg:w-auto justify-center lg:justify-start">
       <img src="/static/images/foto-perfil.jpg" alt="Eleandro Gaioski" class="w-16 h-16 rounded-full ring-4 ring-primary/30 object-cover">
@@ -51,8 +58,9 @@
         <p class="text-base text-primary" data-t="title">Senior Data Scientist • Consultant • Agrotech IoT Specialist • Python • AI • Ex-CTO</p>
       </div>
     </div>
+    
     <div class="flex flex-col sm:flex-row items-center gap-4">
-      <div class="flex bg-gray-100 rounded-full p-1 shadow-md">
+      <div class="flex bg-gray-100/80 rounded-full p-1 shadow-md">
         <button onclick="setLang('en')" id="btn-en" class="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition hover:bg-gray-200">
           <img src="https://flagcdn.com/16x12/us.png" alt="EN"> EN
         </button>
@@ -63,6 +71,7 @@
           <img src="https://flagcdn.com/16x12/br.png" alt="PT"> PT
         </button>
       </div>
+      
       <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
         <a href="https://linkedin.com/in/gaioski" target="_blank" class="bg-[#0077b5] hover:bg-[#005582] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
         <a href="https://github.com/gaioski" target="_blank" class="bg-[#333] hover:bg-black text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-github"></i> GitHub</a>
@@ -74,18 +83,22 @@
 </header>
 
 <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <div class="lg:col-span-2 bg-white rounded-3xl shadow-2xl flex flex-col" style="height: calc(100vh - 180px);">
-    <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-4 text-center rounded-t-3xl">
+  
+  <div class="lg:col-span-2 bg-white/80 rounded-3xl shadow-2xl flex flex-col border border-white/50" style="height: calc(100vh - 180px);">
+    
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-4 text-center rounded-t-3xl shadow-sm">
       <h2 class="text-lg font-bold" data-t="chat-title">Assistente Virtual</h2>
     </div>
-    <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-      <div class="text-center text-gray-600 italic text-sm" data-t="welcome">
+    
+    <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-transparent">
+      <div class="text-center text-gray-600 italic text-sm bg-white/50 rounded-lg p-2 inline-block mx-auto shadow-sm" data-t="welcome">
         Olá! Sou o assistente virtual do Eleandro. Pergunte qualquer coisa!
       </div>
     </div>
+    
     <div id="typing-indicator" class="hidden p-4">
       <div class="flex justify-start">
-        <div class="bg-gray-200 rounded-3xl px-6 py-3 shadow-md flex items-center gap-3">
+        <div class="bg-gray-200/90 rounded-3xl px-6 py-3 shadow-md flex items-center gap-3">
           <div class="flex space-x-2">
             <div class="w-3 h-3 bg-gray-600 rounded-full b1"></div>
             <div class="w-3 h-3 bg-gray-600 rounded-full b2"></div>
@@ -95,9 +108,10 @@
         </div>
       </div>
     </div>
-    <div class="p-4 bg-white border-t border-gray-200 rounded-b-3xl">
+
+    <div class="p-4 bg-white/80 border-t border-gray-200/50 rounded-b-3xl">
       <form id="form" class="flex gap-3">
-        <input type="text" id="input" placeholder="Digite sua pergunta..." class="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-4 focus:ring-primary/30 text-base shadow-sm">
+        <input type="text" id="input" placeholder="Digite sua pergunta..." class="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-4 focus:ring-primary/30 text-base shadow-sm bg-white/90">
         <button type="submit" id="send-btn" class="bg-primary hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition transform hover:scale-105">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
         </button>
@@ -105,12 +119,11 @@
     </div>
   </div>
 
-  <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-200 overflow-y-auto flex flex-col" style="height: calc(100vh - 180px);">
-    <h3 class="font-bold text-lg mb-4 sticky top-0 bg-white pb-2 border-b border-gray-100" data-t="quick-questions">Perguntas rápidas</h3>
+  <div class="bg-white/80 rounded-3xl shadow-xl p-6 border border-white/50 overflow-y-auto flex flex-col" style="height: calc(100vh - 180px);">
+    <h3 class="font-bold text-lg mb-4 sticky top-0 bg-transparent pb-2 border-b border-gray-300/50" data-t="quick-questions">Perguntas rápidas</h3>
     <div id="suggested-questions" class="space-y-3 flex-1"></div>
   </div>
 </main>
-
 
 <script>
   const translations = {
@@ -119,21 +132,19 @@
     fr: { "chat-title": "Assistant Virtuel", title: "Data Scientist Senior • Consultant • Spécialiste IoT Agrotech • Python • IA • Ex-CTO", welcome: "Bonjour! Je suis l'assistant virtuel d'Eleandro. Demandez-moi n'importe quoi!", placeholder: "Posez votre question...", "quick-questions": "Questions rapides", questions: ["Parlez-moi de votre formation","Quelles sont vos expériences professionnelles les plus récentes ?","Quelles sont vos principales technologies ?","Qu'est-ce qui vous distingue ?","Avez-vous travaillé avec l'IA ou les LLMs ?","Avez-vous dirigé des équipes ou des projets ?","Que faites-vous pendant votre temps libre ?","Travaillez-vous à distance ?"] }
   };
 
-  // === INFOGRÁFICOS POR IDIOMA ===
   const backgroundByLang = {
     'pt': '/static/images/infographic_pt.png',
     'en': '/static/images/infographic_en.png',
     'fr': '/static/images/infographic_fr.png'
   };
 
-  let currentBackgroundType = 'infographic'; // 'infographic' ou 'flux'
+  let currentBackgroundType = 'infographic';
 
 function setInfographicBackground(lang) {
   const url = backgroundByLang[lang] || backgroundByLang['pt'];
-  
-  // Fundo com imagem + overlay preto 50% de opacidade
+  // Overlay escuro (0.5) para garantir leitura sobre o fundo
   document.body.style.background = `
-    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
     url('${url}') 
     center/cover fixed no-repeat
   `;
@@ -146,10 +157,8 @@ function setFluxBackground(url) {
     setInfographicBackground(lang);
     return;
   }
-
-  // Imagem do Flux com overlay um pouco mais claro (pra ficar lindo com fotos)
   document.body.style.background = `
-    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
     url('${url}') 
     center/cover fixed no-repeat
   `;
@@ -160,7 +169,6 @@ function setFluxBackground(url) {
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : (lang === 'fr' ? 'fr-FR' : 'en');
     localStorage.setItem('lang', lang);
 
-    // botões
     ['en','pt','fr'].forEach(l => {
       const btn = document.getElementById(`btn-${l}`);
       const active = l === lang;
@@ -182,34 +190,31 @@ function setFluxBackground(url) {
     document.getElementById('input').placeholder = t.placeholder;
     document.getElementById('typing-text').textContent = lang==='pt' ? 'Pensando...' : (lang==='fr' ? 'Réfléchissant...' : 'Thinking...');
 
-    // perguntas rápidas
     const container = document.getElementById('suggested-questions');
     container.innerHTML = '';
     t.questions.forEach(q => {
       const b = document.createElement('button');
-      b.className = "w-full text-left bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-3 px-5 rounded-xl border border-blue-200 transition";
+      // BOTÕES: bg-white/70 sem blur
+      b.className = "w-full text-left bg-white/70 hover:bg-white text-blue-900 font-medium py-3 px-5 rounded-xl border border-white/40 shadow-sm transition";
       b.textContent = q;
       b.onclick = () => send(q);
       container.appendChild(b);
     });
 
-    // troca o infográfico se não estiver com imagem do Flux
     if (currentBackgroundType !== 'flux') {
       setInfographicBackground(lang);
     }
   }
 
-  // === ELEMENTOS DO DOM ===
   const messages = document.getElementById('messages');
-  const input     = document.getElementById('input');
-  const typing    = document.getElementById('typing-indicator');
-  const sendBtn   = document.getElementById('send-btn');
+  const input      = document.getElementById('input');
+  const typing     = document.getElementById('typing-indicator');
+  const sendBtn    = document.getElementById('send-btn');
 
-  // === FUNÇÕES DO CHAT ===
   function addMessage(text, isUser = false) {
     const div = document.createElement('div');
     div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
-    div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-200 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md">
+    div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-100 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md border border-black/5">
       <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${text.replace(/\n/g, '<br>')}</p>
     </div>`;
     messages.appendChild(div);
@@ -218,7 +223,7 @@ function setFluxBackground(url) {
 
   function createCtaButton(text) {
     const btn = document.createElement('button');
-    btn.className = "bg-white border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-center";
+    btn.className = "bg-white/80 border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-center";
     btn.textContent = text;
     btn.onclick = () => send(text);
     return btn;
@@ -228,7 +233,7 @@ function setFluxBackground(url) {
     const html = marked.parse(text).trim();
     const div = document.createElement('div');
     div.className = 'flex justify-start fadeIn';
-    div.innerHTML = `<div class="bg-gray-200 text-gray-900 rounded-3xl px-6 py-4 max-w-base sm:max-w-2xl shadow-md">
+    div.innerHTML = `<div class="bg-gray-100 text-gray-900 rounded-3xl px-6 py-4 max-w-base sm:max-w-2xl shadow-md border border-black/5">
       <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${html}</p>
     </div>`;
     messages.appendChild(div);
@@ -282,13 +287,11 @@ function setFluxBackground(url) {
     }
   }
 
-  // submit do form
   document.getElementById('form').addEventListener('submit', e => {
     e.preventDefault();
     send(input.value);
   });
 
-  // inicia com idioma salvo + infográfico correto
   setLang(localStorage.getItem('lang') || 'pt');
 </script>
 
