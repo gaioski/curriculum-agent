@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Eleandro Gaioski - AI Resume</title>
-  <meta name="description" content="Fale com meu assistente virtual"/>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -24,12 +23,10 @@
       background-position: center;
     }
     
-    /* Scrollbar personalizada */
     #messages { scrollbar-width: thin; }
     #messages::-webkit-scrollbar { width: 6px; }
     #messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
     
-    /* Animações */
     @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
     .b1 { animation: bounce 1.4s infinite; }
     .b2 { animation: bounce 1.4s infinite 0.2s; }
@@ -38,13 +35,10 @@
     @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
     .fadeIn { animation: fadeIn 0.4s ease-out; }
 
-    /* Estilos para Markdown */
-    .bg-gray-100 > p > ul, .bg-gray-100 > p > ol { padding-left: 1.5rem; margin-top: 0.5rem; }
-    .bg-gray-100 > p > ul > li, .bg-gray-100 > p > ol > li { margin-bottom: 0.25rem; }
-    .bg-gray-100 > p > pre {
-      background-color: #e2e8f0; padding: 0.75rem; border-radius: 0.5rem;
-      overflow-x: auto; font-size: 0.9em;
-    }
+    /* Estilos Markdown */
+    .md-content ul, .md-content ol { padding-left: 1.5rem; margin-top: 0.5rem; }
+    .md-content li { margin-bottom: 0.25rem; }
+    .md-content pre { background-color: #e2e8f0; padding: 0.75rem; border-radius: 0.5rem; overflow-x: auto; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col text-gray-800">
@@ -75,8 +69,6 @@
       <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
         <a href="https://linkedin.com/in/gaioski" target="_blank" class="bg-[#0077b5] hover:bg-[#005582] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
         <a href="https://github.com/gaioski" target="_blank" class="bg-[#333] hover:bg-black text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-github"></i> GitHub</a>
-        <a href="mailto:gaioski@gmail.com" class="bg-[#db4437] hover:bg-[#c53929] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-envelope"></i> Email</a>
-        <a href="https://wa.me/5541988633383" target="_blank" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       </div>
     </div>
   </div>
@@ -140,31 +132,140 @@
 
   let currentBackgroundType = 'infographic';
 
-function setInfographicBackground(lang) {
-  const url = backgroundByLang[lang] || backgroundByLang['pt'];
-  // Overlay escuro (0.5) para garantir leitura sobre o fundo
-  document.body.style.background = `
-    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-    url('${url}') 
-    center/cover fixed no-repeat
-  `;
-  currentBackgroundType = 'infographic';
-}
-
-function setFluxBackground(url) {
-  if (!url) {
-    const lang = localStorage.getItem('lang') || 'pt';
-    setInfographicBackground(lang);
-    return;
+  function setInfographicBackground(lang) {
+    const url = backgroundByLang[lang] || backgroundByLang['pt'];
+    document.body.style.background = `
+      linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+      url('${url}') 
+      center/cover fixed no-repeat
+    `;
+    currentBackgroundType = 'infographic';
   }
-  document.body.style.background = `
-    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url('${url}') 
-    center/cover fixed no-repeat
-  `;
-  currentBackgroundType = 'flux';
-}
 
+  function setFluxBackground(url) {
+    if (!url) {
+      const lang = localStorage.getItem('lang') || 'pt';
+      setInfographicBackground(lang);
+      return;
+    }
+    // Mostra a imagem gerada
+    document.body.style.background = `
+      linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+      url('${url}') 
+      center/cover fixed no-repeat
+    `;
+    currentBackgroundType = 'flux';
+  }
+
+  // --- LÓGICA DE CHAT ATUALIZADA (ASYNC) ---
+  const messages = document.getElementById('messages');
+  const input      = document.getElementById('input');
+  const typing     = document.getElementById('typing-indicator');
+  const sendBtn    = document.getElementById('send-btn');
+
+  function addMessage(text, isUser = false) {
+    const div = document.createElement('div');
+    div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
+    div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-100 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md border border-black/5 md-content">
+      ${isUser ? `<p>${text}</p>` : text} 
+    </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function createCtaButton(text) {
+    const btn = document.createElement('button');
+    btn.className = "bg-white/80 border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-center";
+    btn.textContent = text;
+    btn.onclick = () => send(text);
+    return btn;
+  }
+
+  function addResponse(text, cta0, cta1) {
+    // Processa markdown no frontend se não vier HTML
+    const html = marked.parse(text).trim();
+    const div = document.createElement('div');
+    div.className = 'flex justify-start fadeIn';
+    div.innerHTML = `<div class="bg-gray-100 text-gray-900 rounded-3xl px-6 py-4 max-w-base sm:max-w-2xl shadow-md border border-black/5 md-content">
+      ${html}
+    </div>`;
+    messages.appendChild(div);
+
+    if (cta0 || cta1) {
+      const cdiv = document.createElement('div');
+      cdiv.className = 'flex justify-start pt-2 fadeIn';
+      const wrap = document.createElement('div');
+      wrap.className = 'flex flex-col sm:flex-row gap-2';
+      if (cta0) wrap.appendChild(createCtaButton(cta0));
+      if (cta1) wrap.appendChild(createCtaButton(cta1));
+      cdiv.appendChild(wrap);
+      messages.appendChild(cdiv);
+    }
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  // === FUNÇÃO SEND ATUALIZADA ===
+  async function send(question) {
+    if (!question.trim()) return;
+    addMessage(question, true);
+    input.value = '';
+    typing.classList.remove('hidden');
+    sendBtn.disabled = true;
+
+    try {
+      // 1. CHAMA ROTA DE TEXTO (Rápida)
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: question})
+      });
+      const data = await res.json();
+      
+      typing.classList.add('hidden');
+      addResponse(data.response || "...", data.call_action0, data.call_action1);
+      
+      // Libera o chat para novas perguntas
+      sendBtn.disabled = false;
+      input.focus();
+
+      // 2. VERIFICA SE DEVE BUSCAR IMAGEM (Async)
+      if (data.trigger_image) {
+        console.log("Detectado gatilho para imagem. Buscando em background...");
+        
+        // Faz a chamada silenciosa para gerar a imagem
+        fetch('/generate_background', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: question})
+        })
+        .then(r => r.json())
+        .then(imgData => {
+            if (imgData.image_url) {
+                console.log("Imagem recebida e atualizada.");
+                setFluxBackground(imgData.image_url);
+            }
+        })
+        .catch(e => console.error("Erro background img:", e));
+      } else {
+        // Se não tiver imagem nova, volta ao padrão
+        const lang = localStorage.getItem('lang') || 'pt';
+        setInfographicBackground(lang);
+      }
+
+    } catch (e) {
+      console.error(e);
+      typing.classList.add('hidden');
+      addResponse("Erro de conexão.");
+      sendBtn.disabled = false;
+    }
+  }
+
+  document.getElementById('form').addEventListener('submit', e => {
+    e.preventDefault();
+    send(input.value);
+  });
+
+  // Config inicial
   function setLang(lang) {
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : (lang === 'fr' ? 'fr-FR' : 'en');
     localStorage.setItem('lang', lang);
@@ -194,7 +295,6 @@ function setFluxBackground(url) {
     container.innerHTML = '';
     t.questions.forEach(q => {
       const b = document.createElement('button');
-      // BOTÕES: bg-white/70 sem blur
       b.className = "w-full text-left bg-white/70 hover:bg-white text-blue-900 font-medium py-3 px-5 rounded-xl border border-white/40 shadow-sm transition";
       b.textContent = q;
       b.onclick = () => send(q);
@@ -205,92 +305,6 @@ function setFluxBackground(url) {
       setInfographicBackground(lang);
     }
   }
-
-  const messages = document.getElementById('messages');
-  const input      = document.getElementById('input');
-  const typing     = document.getElementById('typing-indicator');
-  const sendBtn    = document.getElementById('send-btn');
-
-  function addMessage(text, isUser = false) {
-    const div = document.createElement('div');
-    div.className = `flex ${isUser ? 'justify-end' : 'justify-start'} fadeIn`;
-    div.innerHTML = `<div class="${isUser ? 'bg-primary text-white' : 'bg-gray-100 text-gray-900'} rounded-3xl px-6 py-4 max-w-xs sm:max-w-lg shadow-md border border-black/5">
-      <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${text.replace(/\n/g, '<br>')}</p>
-    </div>`;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  function createCtaButton(text) {
-    const btn = document.createElement('button');
-    btn.className = "bg-white/80 border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-xl text-sm transition duration-300 shadow-sm w-full sm:w-64 text-center";
-    btn.textContent = text;
-    btn.onclick = () => send(text);
-    return btn;
-  }
-
-  function addResponse(text, cta0, cta1) {
-    const html = marked.parse(text).trim();
-    const div = document.createElement('div');
-    div.className = 'flex justify-start fadeIn';
-    div.innerHTML = `<div class="bg-gray-100 text-gray-900 rounded-3xl px-6 py-4 max-w-base sm:max-w-2xl shadow-md border border-black/5">
-      <p class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">${html}</p>
-    </div>`;
-    messages.appendChild(div);
-
-    if (cta0 || cta1) {
-      const cdiv = document.createElement('div');
-      cdiv.className = 'flex justify-start pt-2 fadeIn';
-      const wrap = document.createElement('div');
-      wrap.className = 'flex flex-col sm:flex-row gap-2';
-      if (cta0) wrap.appendChild(createCtaButton(cta0));
-      if (cta1) wrap.appendChild(createCtaButton(cta1));
-      cdiv.appendChild(wrap);
-      messages.appendChild(cdiv);
-    }
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  async function send(question) {
-    if (!question.trim()) return;
-    addMessage(question, true);
-    input.value = '';
-    typing.classList.remove('hidden');
-    sendBtn.disabled = true;
-
-    try {
-      const res = await fetch('/chat', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({message: question})
-      });
-      const data = await res.json();
-      typing.classList.add('hidden');
-
-      addResponse(data.response || "Desculpe, não consegui responder.", data.call_action0, data.call_action1);
-
-      if (data.background_image) {
-        setFluxBackground(data.background_image);
-      } else {
-        const lang = localStorage.getItem('lang') || 'pt';
-        setInfographicBackground(lang);
-      }
-    } catch (e) {
-      console.error(e);
-      typing.classList.add('hidden');
-      addResponse("Erro de conexão. Tente novamente.");
-      const lang = localStorage.getItem('lang') || 'pt';
-      setInfographicBackground(lang);
-    } finally {
-      sendBtn.disabled = false;
-      input.focus();
-    }
-  }
-
-  document.getElementById('form').addEventListener('submit', e => {
-    e.preventDefault();
-    send(input.value);
-  });
 
   setLang(localStorage.getItem('lang') || 'pt');
 </script>
