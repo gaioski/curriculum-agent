@@ -17,5 +17,6 @@ COPY . .
 # VARIÁVEL OBRIGATÓRIA do Cloud Run
 ENV PORT=8080
 
-# Força o uvicorn a usar a porta correta SEMPRE
-CMD exec uvicorn main:app --host 0.0.0.0 --port $PORT
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}
