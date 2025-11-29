@@ -69,6 +69,8 @@
       <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
         <a href="https://linkedin.com/in/gaioski" target="_blank" class="bg-[#0077b5] hover:bg-[#005582] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
         <a href="https://github.com/gaioski" target="_blank" class="bg-[#333] hover:bg-black text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-github"></i> GitHub</a>
+        <a href="mailto:gaioski@gmail.com" class="bg-[#db4437] hover:bg-[#c53929] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-envelope"></i> Email</a>
+        <a href="https://wa.me/5541988633383" target="_blank" class="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full text-sm flex items-center justify-center gap-2 shadow-sm"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       </div>
     </div>
   </div>
@@ -157,7 +159,7 @@
     currentBackgroundType = 'flux';
   }
 
-  // --- LÓGICA DE CHAT ATUALIZADA (ASYNC) ---
+  // --- LÓGICA DE CHAT (ASYNC) ---
   const messages = document.getElementById('messages');
   const input      = document.getElementById('input');
   const typing     = document.getElementById('typing-indicator');
@@ -182,7 +184,6 @@
   }
 
   function addResponse(text, cta0, cta1) {
-    // Processa markdown no frontend se não vier HTML
     const html = marked.parse(text).trim();
     const div = document.createElement('div');
     div.className = 'flex justify-start fadeIn';
@@ -204,7 +205,6 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
-  // === FUNÇÃO SEND ATUALIZADA ===
   async function send(question) {
     if (!question.trim()) return;
     addMessage(question, true);
@@ -213,7 +213,6 @@
     sendBtn.disabled = true;
 
     try {
-      // 1. CHAMA ROTA DE TEXTO (Rápida)
       const res = await fetch('/chat', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -224,15 +223,11 @@
       typing.classList.add('hidden');
       addResponse(data.response || "...", data.call_action0, data.call_action1);
       
-      // Libera o chat para novas perguntas
       sendBtn.disabled = false;
       input.focus();
 
-      // 2. VERIFICA SE DEVE BUSCAR IMAGEM (Async)
       if (data.trigger_image) {
         console.log("Detectado gatilho para imagem. Buscando em background...");
-        
-        // Faz a chamada silenciosa para gerar a imagem
         fetch('/generate_background', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -241,13 +236,11 @@
         .then(r => r.json())
         .then(imgData => {
             if (imgData.image_url) {
-                console.log("Imagem recebida e atualizada.");
                 setFluxBackground(imgData.image_url);
             }
         })
         .catch(e => console.error("Erro background img:", e));
       } else {
-        // Se não tiver imagem nova, volta ao padrão
         const lang = localStorage.getItem('lang') || 'pt';
         setInfographicBackground(lang);
       }
@@ -265,7 +258,6 @@
     send(input.value);
   });
 
-  // Config inicial
   function setLang(lang) {
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : (lang === 'fr' ? 'fr-FR' : 'en');
     localStorage.setItem('lang', lang);
