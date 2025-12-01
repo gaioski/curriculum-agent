@@ -98,7 +98,7 @@ async def home(request: Request):
 
 @app.post("/chat")
 async def chat_endpoint(request: Request):
-    print(">>> Recebida requisição /chat")
+    #print(">>> Recebida requisição /chat")
     data_req = await request.json()
     question = data_req.get("message", "").strip()
     
@@ -131,7 +131,7 @@ async def chat_endpoint(request: Request):
         
         prompt_atual = answer_json.get('image_prompt', raw_content)
         global_state["last_image_prompt"] = prompt_atual
-        print(prompt_atual)
+        #print(prompt_atual)
 
     except Exception as e:
         print(f"ERRO NO GROK: {e}")
@@ -140,13 +140,14 @@ async def chat_endpoint(request: Request):
     # 2. Gatilho de Imagem (FORÇADO PARA TRUE PARA TESTE)
     # Mude para True para garantir que o front receba a ordem
     should_generate = True 
-    print(f">>> Enviando resposta de texto. Gatilho de imagem: {should_generate}")
+    #print(f">>> Enviando resposta de texto. Gatilho de imagem: {should_generate}")
     
     try:
         # Ao enviar um JSON dump, o Google Cloud Logging faz o parse automático
+        print(log_payload)
         logger.info(json.dumps(log_payload, ensure_ascii=False))
     except:
-        None
+        print('Erro em fazer log no logger.info')
 
     return JSONResponse({
         "response": answer_text,
@@ -170,8 +171,7 @@ async def generate_background_endpoint(request: Request):
         resolution = "1K"
         
         imagen_prompt = global_state["last_image_prompt"]
-        print(imagen_prompt)
-
+        #print(imagen_prompt)
         response_img = client_genai.models.generate_content(
             model="gemini-3-pro-image-preview",
             contents=imagen_prompt,
@@ -185,11 +185,12 @@ async def generate_background_endpoint(request: Request):
         )
         for part in response_img.parts:
             if part.text is not None:
-                print(part.text)
+                #print(part.text)
+                None
             elif image:= part.as_image():
                 image_bytes = image.image_bytes
                 base64_string = base64.b64encode(image_bytes).decode('utf-8')
-                print(">>> SUCESSO! Imagem retornada.")
+                #print(">>> SUCESSO! Imagem retornada.")
                 return JSONResponse({"image_url": f"data:image/png;base64,{base64_string}"})
 
     except Exception as e:
