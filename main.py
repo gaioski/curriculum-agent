@@ -121,6 +121,9 @@ async def chat_endpoint(request: Request):
         try:
             answer_json = json.loads(json_str)
             answer_text = answer_json.get('resposta', raw_content)
+            ctas = answer_json.get('ctas', [])
+            cta_0 = ctas[0] if len(ctas) > 0 else None
+            cta_1 = ctas[1] if len(ctas) > 1 else None
             log_payload = {
                 "user_question": question,
                 "ai_response": answer_text,
@@ -128,6 +131,7 @@ async def chat_endpoint(request: Request):
             }
         except:
             answer_text = raw_content
+            cta_0, cta_1 = None, None
         
         prompt_atual = answer_json.get('image_prompt', raw_content)
         global_state["last_image_prompt"] = prompt_atual
@@ -151,6 +155,8 @@ async def chat_endpoint(request: Request):
 
     return JSONResponse({
         "response": answer_text,
+        "call_action0": cta_0,
+        "call_action1": cta_1,
         "trigger_image": should_generate
     })
 

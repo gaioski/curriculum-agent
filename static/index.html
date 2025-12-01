@@ -45,6 +45,61 @@
 		pointer-events: none;
 		transition: opacity 0.4s ease; /* Adiciona a transição suave */
 	}
+		
+	/* Caixa de Perguntas Rápidas — Scroll bonito e interno */
+	.quick-questions-container {
+	  height: calc(100vh - 180px);
+	  background: rgba(255, 255, 255, 0.9);
+	  backdrop-filter: blur(12px);
+	  border-radius: 1.5rem;
+	  border: 1px solid rgba(255, 255, 255, 0.5);
+	  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+	  padding: 1.5rem;
+	  display: flex;
+	  flex-direction: column;
+	  overflow: hidden; /* ← importante */
+	}
+
+	.quick-questions-header {
+	  background: linear-gradient(to right, #0ea5e9, #2563eb);
+	  color: white;
+	  padding: 0.5rem 2rem;
+	  text-align: center;
+	  font-size: 1.2rem;
+	  font-weight: bold;
+	  border-radius: 1.5rem 1.5rem 0 0;
+	  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+	  margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+	}
+
+	.quick-questions-list {
+	  flex: 1;
+	  overflow-y: auto;
+	  padding-right: 0.5rem;
+	  margin-right: -0.5rem; /* compensa o padding do scroll */
+	  scrollbar-width: thin;
+	  scrollbar-color: rgba(100, 100, 255, 0.4) transparent;
+	}
+
+	/* Scroll bonito no Chrome/Edge */
+	.quick-questions-list::-webkit-scrollbar {
+	  width: 8px;
+	}
+	.quick-questions-list::-webkit-scrollbar-track {
+	  background: transparent;
+	  border-radius: 10px;
+	}
+	.quick-questions-list::-webkit-scrollbar-thumb {
+	  background: rgba(100, 150, 255, 0.5);
+	  border-radius: 10px;
+	  border: 2px solid transparent;
+	  background-clip: content-box;
+	}
+	.quick-questions-list::-webkit-scrollbar-thumb:hover {
+	  background: rgba(80, 120, 255, 0.7);
+	  background-clip: content-box;
+	}
+	
   </style>
 </head>
 <body class="min-h-screen flex flex-col text-gray-800">
@@ -86,7 +141,7 @@
   
   <div class="lg:col-span-2 bg-white/90 rounded-3xl shadow-2xl flex flex-col border border-white/50" style="height: calc(100vh - 180px);">
     
-    <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-4 text-center rounded-t-3xl shadow-sm">
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-2 text-center rounded-t-3xl shadow-sm">
       <h2 class="text-lg font-bold" data-t="chat-title">Assistente Virtual</h2>
     </div>
     
@@ -119,10 +174,11 @@
     </div>
   </div>
 
-  <div class="bg-white/90 rounded-3xl shadow-xl p-6 border border-white/50 overflow-y-auto flex flex-col" style="height: calc(100vh - 180px);">
-    <h3 class="font-bold text-lg mb-4 sticky top-0 bg-transparent pb-2 border-b border-gray-300/50" data-t="quick-questions">Perguntas rápidas</h3>
-    <div id="suggested-questions" class="space-y-3 flex-1"></div>
-  </div>
+	<div class="quick-questions-container">
+	  <div class="quick-questions-header" data-t="quick-questions">Perguntas rápidas</div>
+	  <div id="suggested-questions" class="quick-questions-list space-y-3"></div>
+	</div>
+	
 </main>
 
 <script>
@@ -166,41 +222,38 @@
   }
 
 	const body = document.body;
+	const header = document.querySelector('header');
+	const main = document.querySelector('main');
 
-	// Evento: Usuário pressiona o botão do mouse
-// Evento: Usuário pressiona o botão do mouse
-	body.addEventListener('mousedown', (event) => {
-		if (event.button === 0) {
-			
-			// 1. Verifica se o clique ocorreu dentro de um elemento interativo
-			// Se o clique ocorreu em um elemento com a tag 'A', 'BUTTON', ou 'INPUT', não escondemos o conteúdo.
-			const isInteractive = event.target.tagName === 'A' || 
-								  event.target.tagName === 'BUTTON' || 
-								  event.target.tagName === 'INPUT';
+	// Função para adicionar/remover classe (simplificada)
+	function toggleContentVisibility(hide) {
+		body.classList.toggle('hide-content', hide);
+	}
 
-			// 2. Verifica se o clique ocorreu dentro do cabeçalho (que deve permanecer visível e funcional)
-			const header = document.querySelector('header');
-			const isInsideHeader = header.contains(event.target);
-			
-			// Somente adiciona a classe 'hide-content' se o clique NÃO foi em um elemento interativo
-			// E NÃO foi dentro do header
-			if (!isInteractive && !isInsideHeader) {
-				body.classList.add('hide-content'); // Isso aplica a classe no <body>
-			}
+	// 1. Interromper o evento se começar no Header ou Main (Captura)
+	document.addEventListener('mousedown', (event) => {
+		// Verifica se o clique começou dentro do header OU dentro do main
+		if (header.contains(event.target) || main.contains(event.target)) {
+			// Impede que o evento de mousedown continue a se propagar até o body
+			event.stopPropagation();
+		}
+	}, true); // O 'true' garante que pegamos o evento primeiro.
+
+	// 2. Ocultar conteúdo (Listener no Body/Document)
+	document.addEventListener('mousedown', (event) => {
+		if (event.button === 0) { // Botão esquerdo
+			// Se o evento chegou até aqui, significa que ele não foi interrompido (clique no background)
+			toggleContentVisibility(true); 
 		}
 	});
 
-	// O mouseup permanece inalterado, pois deve sempre remover a classe para restaurar.
-	body.addEventListener('mouseup', (event) => {
-		body.classList.remove('hide-content');
+	// 3. Mostrar conteúdo e fallback
+	document.addEventListener('mouseup', () => {
+		toggleContentVisibility(false);
 	});
-
+    
 	document.addEventListener('mouseleave', () => {
-		body.classList.remove('hide-content');
-	});
-
-	document.addEventListener('mouseleave', () => {
-		body.classList.remove('hide-content');
+		toggleContentVisibility(false);
 	});
 
 

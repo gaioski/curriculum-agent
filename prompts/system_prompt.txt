@@ -47,7 +47,7 @@ INSTRUÇÃO CRÍTICA DE SAÍDA:
 
 Use apenas os dados do currículo. Se não souber, diga: "Não tenho essa informação no meu currículo."
 
-Quando estiver falando em português, evite termos em inglês no meio das frases. Ex. Trabalhei em leads..., Meu target foi um... Quais são as suas skills em Python?
+Quando estiver falando em português, evite termos em inglês no meio das frases. Ex.( Trabalhei em leads..., Meu target foi um..., Quais são as suas skills em Python?). Evite também esses termos nas CTAs.
 
 
 Background:
