@@ -16,6 +16,9 @@ import base64
 from google import genai
 from google.genai import types
 
+
+global_state = {"last_image_prompt": None}
+
 # === CONFIGURAÇÃO INICIAL ===
 load_dotenv()
 sys.stdout.reconfigure(encoding='utf-8')
@@ -93,6 +96,10 @@ async def chat_endpoint(request: Request):
             answer_text = answer_json.get('resposta', raw_content)
         except:
             answer_text = raw_content
+        
+        prompt_atual = answer_json.get('image_prompt', raw_content)
+        global_state["last_image_prompt"] = prompt_atual
+        print(prompt_atual)
 
     except Exception as e:
         print(f"ERRO NO GROK: {e}")
@@ -118,36 +125,34 @@ async def generate_background_endpoint(request: Request):
     if not GEMINI_KEY:
         print("ERRO: Tentou gerar imagem mas GEMINI_API_KEY está faltando.")
         return JSONResponse({"error": "Sem chave Gemini"}, status_code=400)
-
     try:
-        # 1. Prompt
-        print("   1. Gerando Prompt visual com Grok...")
-        prompt_msg = f"Create a detailed English prompt for a photorealistic background image about: '{question}'. No text in image."
-        prompt_chat = client_xai.chat.create(
-            model="grok-4-1-fast-reasoning",
-            messages=[user(prompt_msg)], 
-        )
-        imagen_prompt = prompt_chat.sample().content.strip()
-        print(f"   Prompt Gerado: {imagen_prompt}")
+        ## 1. Imagem
+        #print("   2. Chamando Google Image...")
+        aspect_ratio="16:9"
+        resolution = "1K"
+        
+        imagen_prompt = global_state["last_image_prompt"]
+        print(imagen_prompt)
 
-        # 2. Imagem
-        print("   2. Chamando Google Imagen...")
-        response_img = client_genai.models.generate_images(
-            model="imagen-4.0-fast-generate-001", # Verifique se sua conta aceita este ou o 4.0
-            prompt=imagen_prompt,
-            config=types.GenerateImagesConfig(
-                number_of_images=1,
-                aspect_ratio="16:9",
+        response_img = client_genai.models.generate_content(
+            model="gemini-3-pro-image-preview",
+            contents=imagen_prompt,
+            config=types.GenerateContentConfig(
+                response_modalities=['TEXT', 'IMAGE'],
+                image_config=types.ImageConfig(
+                    aspect_ratio=aspect_ratio,
+                    image_size=resolution
+                ),
             )
         )
-
-        # 3. Base64
-        print("   3. Convertendo imagem...")
-        for generated_image in response_img.generated_images:
-            image_bytes = generated_image.image.image_bytes
-            base64_string = base64.b64encode(image_bytes).decode('utf-8')
-            print(">>> SUCESSO! Imagem retornada.")
-            return JSONResponse({"image_url": f"data:image/png;base64,{base64_string}"})
+        for part in response_img.parts:
+            if part.text is not None:
+                print(part.text)
+            elif image:= part.as_image():
+                image_bytes = image.image_bytes
+                base64_string = base64.b64encode(image_bytes).decode('utf-8')
+                print(">>> SUCESSO! Imagem retornada.")
+                return JSONResponse({"image_url": f"data:image/png;base64,{base64_string}"})
 
     except Exception as e:
         print(f"!!! ERRO CRÍTICO NA GERAÇÃO DE IMAGEM: {e}")
@@ -162,4 +167,7 @@ async def startup_event():
     print("\n================ DEBUG MODE ON ================")
     print("Acesse http://localhost:8000")
     print("Observe este terminal para ver os erros!")
+    print("Debug: uvicorn main:app --host 0.0.0.0 --port 8000 --reload")
+    print("link: https://tinyurl.com/gaioskiCvAgent")
     print("===============================================\n")
+    

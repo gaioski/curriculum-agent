@@ -39,6 +39,12 @@
     .md-content ul, .md-content ol { padding-left: 1.5rem; margin-top: 0.5rem; }
     .md-content li { margin-bottom: 0.25rem; }
     .md-content pre { background-color: #e2e8f0; padding: 0.75rem; border-radius: 0.5rem; overflow-x: auto; }
+	
+	.hide-content main {
+		opacity: 0 !important;
+		pointer-events: none;
+		transition: opacity 0.4s ease; /* Adiciona a transição suave */
+	}
   </style>
 </head>
 <body class="min-h-screen flex flex-col text-gray-800">
@@ -158,6 +164,45 @@
     `;
     currentBackgroundType = 'flux';
   }
+
+	const body = document.body;
+
+	// Evento: Usuário pressiona o botão do mouse
+// Evento: Usuário pressiona o botão do mouse
+	body.addEventListener('mousedown', (event) => {
+		if (event.button === 0) {
+			
+			// 1. Verifica se o clique ocorreu dentro de um elemento interativo
+			// Se o clique ocorreu em um elemento com a tag 'A', 'BUTTON', ou 'INPUT', não escondemos o conteúdo.
+			const isInteractive = event.target.tagName === 'A' || 
+								  event.target.tagName === 'BUTTON' || 
+								  event.target.tagName === 'INPUT';
+
+			// 2. Verifica se o clique ocorreu dentro do cabeçalho (que deve permanecer visível e funcional)
+			const header = document.querySelector('header');
+			const isInsideHeader = header.contains(event.target);
+			
+			// Somente adiciona a classe 'hide-content' se o clique NÃO foi em um elemento interativo
+			// E NÃO foi dentro do header
+			if (!isInteractive && !isInsideHeader) {
+				body.classList.add('hide-content'); // Isso aplica a classe no <body>
+			}
+		}
+	});
+
+	// O mouseup permanece inalterado, pois deve sempre remover a classe para restaurar.
+	body.addEventListener('mouseup', (event) => {
+		body.classList.remove('hide-content');
+	});
+
+	document.addEventListener('mouseleave', () => {
+		body.classList.remove('hide-content');
+	});
+
+	document.addEventListener('mouseleave', () => {
+		body.classList.remove('hide-content');
+	});
+
 
   // --- LÓGICA DE CHAT (ASYNC) ---
   const messages = document.getElementById('messages');
