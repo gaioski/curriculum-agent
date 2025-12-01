@@ -15,15 +15,41 @@ import re
 import base64 
 from google import genai
 from google.genai import types
-
+import logging
 
 global_state = {"last_image_prompt": None}
+
+
+# ===================== LOGGING GOOGLE CLOUD =====================
+# Tenta configurar o logging do Google. Se falhar (rodando local), usa o padrão.
+try:
+    import google.cloud.logging
+    from google.cloud.logging.handlers import CloudLoggingHandler
+    
+    # Instancia o cliente
+    client = google.cloud.logging.Client()
+    # Conecta o logger do Python ao Google Cloud Logging
+    client.setup_logging()
+    logging.info("Google Cloud Logging ativado com sucesso.")
+except ImportError:
+    print("Biblioteca google-cloud-logging não encontrada. Usando log padrão.")
+except Exception as e:
+    print(f"Rodando localmente ou sem credenciais GCP: {e}")
+
+# Configuração padrão do logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("curr-ia-logger") # Nome do logger para facilitar busca
+
 
 # === CONFIGURAÇÃO INICIAL ===
 load_dotenv()
 sys.stdout.reconfigure(encoding='utf-8')
 
-app = FastAPI(title="Debug Mode")
+app = FastAPI(
+    title="Eleandro Gaioski - Currículo com IA",
+    description="Assistente virtual que responde sobre minha carreira",
+    version="2.0.0"
+)
 
 # Configuração CORS
 app.add_middleware(
@@ -91,9 +117,15 @@ async def chat_endpoint(request: Request):
         # Limpeza básica do JSON
         match = re.search(r'(\{.*\})', raw_content, re.DOTALL)
         json_str = match.group(1) if match else raw_content
+        
         try:
             answer_json = json.loads(json_str)
             answer_text = answer_json.get('resposta', raw_content)
+            log_payload = {
+                "user_question": question,
+                "ai_response": answer_text,
+                "event_type": "chat_interaction",
+            }
         except:
             answer_text = raw_content
         
@@ -109,6 +141,12 @@ async def chat_endpoint(request: Request):
     # Mude para True para garantir que o front receba a ordem
     should_generate = True 
     print(f">>> Enviando resposta de texto. Gatilho de imagem: {should_generate}")
+    
+    try:
+        # Ao enviar um JSON dump, o Google Cloud Logging faz o parse automático
+        logger.info(json.dumps(log_payload, ensure_ascii=False))
+    except:
+        None
 
     return JSONResponse({
         "response": answer_text,
